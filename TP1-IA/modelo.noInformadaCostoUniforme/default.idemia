@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idemia:AgentModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:idemia="utn.frsf.cidisi">
+  <Environment>
+    <EnvironmentState name="AmbienteEstado">
+      <DataStructure name="mapa" type="Other"/>
+      <DataStructure name="posicionVictimario"/>
+      <DataStructure name="posicionDrone" type="pair"/>
+      <DataStructure name="listaCuadrantes" type="Other"/>
+    </EnvironmentState>
+  </Environment>
+  <Agent name="DroneAgente">
+    <Strategy xsi:type="idemia:Search" searchStrategy="UniformCostSearch"/>
+    <Goal name="DroneObjetivo" value="posicionDrone[3]=posicionVictimario &amp;&amp; energia>0"/>
+    <AgentState name="DroneEstado">
+      <DataStructure name="energia"/>
+      <DataStructure name="posicion" type="pair"/>
+      <DataStructure name="esquinasAdyacentes" type="pair"/>
+      <DataStructure name="intensidadSenial" type="pair"/>
+    </AgentState>
+  </Agent>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNivelAlto"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNivelMedio"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNivelBajo"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="EncontrarVictimario"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrEsquinaAdyacente"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="antena"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="gps"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="camara"/>
+</idemia:AgentModel>
