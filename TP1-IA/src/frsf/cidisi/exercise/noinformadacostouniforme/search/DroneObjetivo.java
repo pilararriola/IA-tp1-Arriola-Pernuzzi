@@ -10,11 +10,15 @@ public class DroneObjetivo extends GoalTest {
     @Override
     public boolean isGoalState (AgentState agentState) {
     
-    	// TODO: Complete Method
-        if  (true) //(posicionDrone[3]=posicionVictimario && energia>0)
+    	
+		// TODO: Complete Method
+        if  (((DroneEstado)agentState).getvictimario() == true && ((DroneEstado)agentState).getenergia()>0) 
+        	
+        	//El drone se encuentra en el posicion del victimario
+        	// VICTIMARIO IDENTIFICADO!
         	{
             return true;
         	}
-        return false;
+        return false; 
 	}
 }

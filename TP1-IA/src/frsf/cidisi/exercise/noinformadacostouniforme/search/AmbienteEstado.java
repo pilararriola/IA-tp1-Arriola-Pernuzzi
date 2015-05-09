@@ -1,5 +1,9 @@
 package frsf.cidisi.exercise.noinformadacostouniforme.search;
 
+import java.util.List;
+
+import frsf.cidisi.exercise.entidades.Cuadrante;
+import frsf.cidisi.exercise.entidades.Esquina;
 import frsf.cidisi.faia.state.EnvironmentState;
 
 /**
@@ -8,20 +12,12 @@ import frsf.cidisi.faia.state.EnvironmentState;
 public class AmbienteEstado extends EnvironmentState {
 	
 	//TODO: Setup Variables
-    //private Other mapa;
+	private List<Esquina> mapa;
     private int posicionVictimario;
     private int[] posicionDrone;
-    //private Other listaCuadrantes;
+    private List<Cuadrante> listaCuadrantes;
 	
     public AmbienteEstado() {
-        
-        //TODO: Complete Method
-    	/*
-			// mapa = initData0;
-			// posicionVictimario = initData1;
-			// posicionDrone = initData2;
-			// listaCuadrantes = initData3;
-        */
         this.initState();
     }
 
@@ -30,8 +26,11 @@ public class AmbienteEstado extends EnvironmentState {
      */
     @Override
     public void initState() {
-
         //TODO: Complete Method
+			// mapa = initData0; Setear las 78 esquinas
+			//posicionVictimario = initData1;
+			//posicionDrone = initData2;
+			//listaCuadrantes = initData3;
     }
 
     /**

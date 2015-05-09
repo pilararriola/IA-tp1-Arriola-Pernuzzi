@@ -52,11 +52,20 @@
             <element xmi:type="idemia:DataStructure" href="default.idemia#//@Agent/@AgentState/@DataStructure.3"/>
             <layoutConstraint xmi:type="notation:Bounds" xmi:id="_mYQ7YfZkEeSSOf3oxc7-Dg"/>
           </children>
+          <children xmi:type="notation:Shape" xmi:id="_e-7-kPZ-EeSSOf3oxc7-Dg" type="3002" fontName="Segoe UI">
+            <children xmi:type="notation:DecorationNode" xmi:id="_e-7-kvZ-EeSSOf3oxc7-Dg" type="5001"/>
+            <children xmi:type="notation:DecorationNode" xmi:id="_e-7-k_Z-EeSSOf3oxc7-Dg" type="5002">
+              <styles xmi:type="notation:DescriptionStyle" xmi:id="_e-7-lPZ-EeSSOf3oxc7-Dg"/>
+            </children>
+            <children xmi:type="notation:DecorationNode" xmi:id="_e-7-lfZ-EeSSOf3oxc7-Dg" type="5003"/>
+            <element xmi:type="idemia:DataStructure" href="default.idemia#//@Agent/@AgentState/@DataStructure.4"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_e-7-kfZ-EeSSOf3oxc7-Dg"/>
+          </children>
           <styles xmi:type="notation:SortingStyle" xmi:id="_Wc31tPZkEeSSOf3oxc7-Dg"/>
           <styles xmi:type="notation:FilteringStyle" xmi:id="_Wc31tfZkEeSSOf3oxc7-Dg"/>
         </children>
         <element xmi:type="idemia:State" href="default.idemia#//@Agent/@AgentState"/>
-        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Wc31sfZkEeSSOf3oxc7-Dg" x="3" y="6" width="265" height="123"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Wc31sfZkEeSSOf3oxc7-Dg" x="3" y="6" width="265" height="153"/>
       </children>
     </children>
     <children xmi:type="notation:BasicCompartment" xmi:id="_PwCKR_ZkEeSSOf3oxc7-Dg" type="7003">
