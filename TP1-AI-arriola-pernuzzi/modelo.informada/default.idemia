@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idemia:AgentModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:idemia="utn.frsf.cidisi">
+  <Environment name="Ambiente">
+    <EnvironmentState name="EstadoAmbiente">
+      <DataStructure name="mapa" type="Other"/>
+      <DataStructure name="posicionVictimario"/>
+      <DataStructure name="posicionDrone" type="pair"/>
+      <DataStructure name="listaCuadrantes" type="Other"/>
+    </EnvironmentState>
+  </Environment>
+  <Agent name="Drone">
+    <Strategy xsi:type="idemia:Search" searchStrategy="GreedySearch"/>
+    <Goal name="ObjetivoDrone" value="getVictimario()==true &amp;&amp; energia>0"/>
+    <AgentState name="EstadoDrone">
+      <DataStructure name="energia"/>
+      <DataStructure name="posicion" type="pair"/>
+      <DataStructure name="esquinasAdyacentes" type="pair"/>
+      <DataStructure name="intensidadSenial" type="pair"/>
+      <DataStructure name="victimario" type="boolean"/>
+    </AgentState>
+  </Agent>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNivelBajo"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNivelMedio"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNivelAlto"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNorOeste"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrOeste"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrSurOeste"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrSur"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrSurEste"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrEste"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNorEste"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNorte"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="gps"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="antena"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="camara"/>
+</idemia:AgentModel>
