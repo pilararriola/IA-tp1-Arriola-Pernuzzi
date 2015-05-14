@@ -11,9 +11,9 @@ public class DronePerception extends Perception {
 	
 	
 	//TODO: Setup Sensors
-	private int gps;
-	private int antena;
-	private int camara;
+//	private Other gps;
+//	private Other antena;
+//	private Other camara;
 	
  
 
@@ -53,24 +53,24 @@ public class DronePerception extends Perception {
     // The following methods are agent-specific:
     //TODO: Complete this section with the agent-specific methods
 	
-     public int getgps(){
-        return gps;
-     }
-     public void setgps(int arg){
-        this.gps = arg;
-     }
-     public int getantena(){
-        return antena;
-     }
-     public void setantena(int arg){
-        this.antena = arg;
-     }
-     public int getcamara(){
-        return camara;
-     }
-     public void setcamara(int arg){
-        this.camara = arg;
-     }
+//     public Other getgps(){
+//        return gps;
+//     }
+//     public void setgps(Other arg){
+//        this.gps = arg;
+//     }
+//     public Other getantena(){
+//        return antena;
+//     }
+//     public void setantena(Other arg){
+//        this.antena = arg;
+//     }
+//     public Other getcamara(){
+//        return camara;
+//     }
+//     public void setcamara(Other arg){
+//        this.camara = arg;
+//     }
 	
    
 }

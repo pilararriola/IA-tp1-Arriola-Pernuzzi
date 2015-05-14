@@ -1,12 +1,12 @@
-package frsf.cidisi.exercise.noinformadacostouniforme.search.actions;
+package frsf.cidisi.exercise.noinformadaprofundidad.search.actions;
 
-import frsf.cidisi.exercise.noinformadacostouniforme.search.*;
+import frsf.cidisi.exercise.noinformadaprofundidad.search.*;
 import frsf.cidisi.faia.agent.search.SearchAction;
 import frsf.cidisi.faia.agent.search.SearchBasedAgentState;
 import frsf.cidisi.faia.state.AgentState;
 import frsf.cidisi.faia.state.EnvironmentState;
 
-public class IrNorte extends SearchAction {
+public class IdentificarVictimario extends SearchAction {
 
     /**
      * This method updates a tree node state when the search process is running.
@@ -17,7 +17,7 @@ public class IrNorte extends SearchAction {
         EstadoDrone agState = (EstadoDrone) s;
         
         // TODO: Use this conditions
-        // PreConditions: Tiene que tener la energia suficiente para ejecutar la accion y tiene que haber un su
+        // PreConditions: null
         // PostConditions: null
         
         return null;
@@ -32,7 +32,7 @@ public class IrNorte extends SearchAction {
         EstadoDrone agState = ((EstadoDrone) ast);
 
         // TODO: Use this conditions
-        // PreConditions: Tiene que tener la energia suficiente para ejecutar la accion y tiene que haber un su
+        // PreConditions: null
         // PostConditions: null
         
         if (true) {
@@ -60,6 +60,6 @@ public class IrNorte extends SearchAction {
      */
     @Override
     public String toString() {
-        return "IrNorte";
+        return "IdentificarVictimario";
     }
 }

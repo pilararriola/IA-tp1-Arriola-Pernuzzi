@@ -22,6 +22,7 @@ import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrSurEste;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrEste;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNorEste;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNorte;
+import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IdentificarVictimario;
 
 import frsf.cidisi.faia.agent.Perception;
 import frsf.cidisi.faia.agent.search.Problem;
@@ -37,16 +38,15 @@ public class Drone extends SearchBasedAgent {
 
     public Drone() {
 
-        // The Agent Goal
+        // Objetivo del agente
         ObjetivoDrone agGoal = new ObjetivoDrone();
 
-        // The Agent State
+        // Estado del agente
         EstadoDrone agState = new EstadoDrone();
         this.setAgentState(agState);
 
-        // Create the operators
-        Vector<SearchAction> operators = new Vector<SearchAction>();
-        
+        // Operadores
+        Vector<SearchAction> operators = new Vector<SearchAction>();	
         operators.addElement(new IrNivelAlto());	
         operators.addElement(new IrNivelMedio());	
         operators.addElement(new IrNivelBajo());	
@@ -58,8 +58,9 @@ public class Drone extends SearchBasedAgent {
         operators.addElement(new IrEste());	
         operators.addElement(new IrNorEste());	
         operators.addElement(new IrNorte());	
+        operators.addElement(new IdentificarVictimario());	
 
-        // Create the Problem which the agent will resolve
+        // Se define el problema que el agente debe resolver
         Problem problem = new Problem(agGoal, agState, operators);
         this.setProblem(problem);
     }

@@ -11,6 +11,7 @@ import frsf.cidisi.exercise.noinformadaprofundidad.search.actions.IrSurEste;
 import frsf.cidisi.exercise.noinformadaprofundidad.search.actions.IrEste;
 import frsf.cidisi.exercise.noinformadaprofundidad.search.actions.IrNorEste;
 import frsf.cidisi.exercise.noinformadaprofundidad.search.actions.IrNorte;
+import frsf.cidisi.exercise.noinformadaprofundidad.search.actions.IdentificarVictimario;
 
 import frsf.cidisi.faia.agent.Perception;
 import frsf.cidisi.faia.agent.search.Problem;
@@ -46,6 +47,7 @@ public class Drone extends SearchBasedAgent {
         operators.addElement(new IrEste());	
         operators.addElement(new IrNorEste());	
         operators.addElement(new IrNorte());	
+        operators.addElement(new IdentificarVictimario());	
 
         // Create the Problem which the agent will resolve
         Problem problem = new Problem(agGoal, agState, operators);

@@ -8,12 +8,12 @@ import frsf.cidisi.faia.agent.search.SearchBasedAgentState;
  */
 public class EstadoDrone extends SearchBasedAgentState {
 	
-	//Setup Variables
+	//Variables de estado
     private int energia;
     private int[] posicion;
     private int[] esquinasAdyacentes;
     private int[] intensidadSenial;
-    private boolean victimario;//True si el victimario se encuentra en la misma posicion que el drone, False caso contrario
+    private boolean victimario;
 	
 
     public EstadoDrone() {
@@ -27,26 +27,37 @@ public class EstadoDrone extends SearchBasedAgentState {
      */
     @Override
     public SearchBasedAgentState clone() {
-        
-		EstadoDrone nuevoEstado= new EstadoDrone();
-		//Copio la energia
-		int energia2= this.getenergia();
-		//Copio la posicion
-		int [] posicion2= this.getposicion();
-		//Copio esquinas adyacentes
-		int[] esquinasAdyacentes2=this.getesquinasAdyacentes();
-		//Copio intensidad senial
-		int [] intensidadSenial2= this.getintensidadSenial();
-		//Copio victimario
-		boolean victimario2= this.getvictimario();
+    	int i;
+    	EstadoDrone nuevoEstado= new EstadoDrone();
+		//Copiamos la energia
+		int energiaCopia= this.getenergia();
+		
+		//Copiamos la posicion
+		int [] posicionCopia= new int[4]; 
+		for(i=0;i<4;i++){
+			posicionCopia[i]=this.getposicion()[i];
+		}
+		//Copiamos esquinas adyacentes
+		int[] esquinasAdyacentesCopia= new int[9];
+		for(i=0;i<9;i++){
+			esquinasAdyacentesCopia[i]=this.getesquinasAdyacentes()[i];
+		}
+		
+		//Copiamos intensidad senial
+		int [] intensidadSenialCopia= new int[4];
+		for(i=0;i<4;i++){
+			intensidadSenialCopia[i]=this.getintensidadSenial()[i];
+		}
+		
+		//Copiamos victimario
+		boolean victimarioCopia= this.getvictimario();
 		
 		//Seteamos
-		nuevoEstado.setenergia(energia2);
-		nuevoEstado.setposicion(posicion2);
-		nuevoEstado.setesquinasAdyacentes(esquinasAdyacentes2);
-		nuevoEstado.setintensidadSenial(intensidadSenial2);
-		nuevoEstado.setvictimario(victimario2);
-		
+		nuevoEstado.setenergia(energiaCopia);
+		nuevoEstado.setposicion(posicionCopia);
+		nuevoEstado.setesquinasAdyacentes(esquinasAdyacentesCopia);
+		nuevoEstado.setintensidadSenial(intensidadSenialCopia);
+		nuevoEstado.setvictimario(victimarioCopia);
 		
         return nuevoEstado;
     }
@@ -57,7 +68,7 @@ public class EstadoDrone extends SearchBasedAgentState {
      */
     @Override
     public void updateState(Perception p) {
-        DronePerception dronePercepcion= (DronePerception) p; //seteamos a drone perception
+    	DronePerception dronePercepcion= (DronePerception) p; //seteamos a drone perception
         //Actualiza la posicion con el gps
         //Actualiza la intensidad de señales con la antena
         //Actualiza esquinas adyacentes con la camara
@@ -80,7 +91,7 @@ public class EstadoDrone extends SearchBasedAgentState {
 		 	2: Subcuadrante: Numero de subcuadrante en el nivel medio (1 - 2 - 3 - 4)
 		 	3: Esquina: Numero de esquina en la que se ubica el agente en el nivel bajo (1 - ... - 78)
 		 * */
-		posicion = new int[]{2,1,1,1}; //Se debería setear de acuerdoo al escenario
+		posicion = new int[]{2,0,0,0}; //Siempre se inicia en el nivel alto, el resto se setea según el escenario
 		
 		/*
 		 esquinasAdyacentes: vector de 8 posiciones, que se corresponde a las 8 esquinas adyacentes 
@@ -91,10 +102,9 @@ public class EstadoDrone extends SearchBasedAgentState {
 		 -idEsquina si puede trasladarse en esa direccion
 		 -0 caso contrario
 		 */
-		esquinasAdyacentes= new int[9]; 
-		intensidadSenial = new int[]{30,20,0,0};//Se debería setear de acuerdoo al escenario
+		esquinasAdyacentes= new int[]{0,0,0,0,0,0,0,0,0}; //Se va a setear cuando se llegue al nivel bajo
+		intensidadSenial = new int[]{0,0,0,0};//Se debería setear de acuerdoo al escenario
 		victimario= false;
-		
 
     }
 
@@ -103,10 +113,28 @@ public class EstadoDrone extends SearchBasedAgentState {
      */
     @Override
     public String toString() {
-        String str = "";
-
-        //TODO: Complete Method
-
+    	int[] pos= this.getposicion();
+    	int[] esqAdy= this.getesquinasAdyacentes() ;
+    	int[] seniales= this.getintensidadSenial();
+        String str = "----- ESTADO DEL DRONE -----\n";
+        str += "Nivel: " + pos[0] + "\n"
+        	+  "Cuadrante: "+ pos[1] + "\n" 
+        	+  "Subcuadrante: "+ pos[2] + "\n"  
+        	+  "Esquina: "+ pos[3] + "\n" 
+        	+  "Energia: "+ this.getenergia() + "\n" 
+        	+  "Esquinas adyacentes: (";
+        for(int i=0;i<9;i++){
+        	str += esqAdy[i];
+        	if(i<8)str += " , ";
+        }
+        str += ")\n" 
+        	+ "Intensidad señales recibidas: (";
+        for(int i=0;i<4;i++){
+        	str += seniales[i];
+        	if(i<3)str += " , ";
+        }
+        str += ")\n" 
+        	+ "Victimario encontrado: "+ this.getvictimario()+ "\n";
         return str;
     }
 
@@ -117,12 +145,18 @@ public class EstadoDrone extends SearchBasedAgentState {
     @Override
     public boolean equals(Object obj) {
        
-       //TODO: Complete Method
+    	//Si es instancia de EstadoDrone y la posición es la misma, el objeto va a ser igual
+        if ((obj instanceof EstadoDrone)) {
+        	if(((EstadoDrone) obj).getposicion() == this.getposicion()){
+        		return true;
+        	}
+        }
+        //Si no se cumplen las dos condiciones anteriores, retorna false
+        return false;
         
-        return true;
     }
 
-   
+    
     // The following methods are agent-specific:
    	
      public int getenergia(){

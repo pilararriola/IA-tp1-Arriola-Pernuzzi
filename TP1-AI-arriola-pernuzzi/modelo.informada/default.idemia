@@ -30,7 +30,8 @@
   <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrEste"/>
   <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNorEste"/>
   <Actions execute_by="//@Agent" executed_on="//@Environment" name="IrNorte"/>
-  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="gps"/>
-  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="antena"/>
-  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="camara"/>
+  <Actions execute_by="//@Agent" executed_on="//@Environment" name="IdentificarVictimario"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="gps" type="Other"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="antena" type="Other"/>
+  <Perceptions perceived_on="//@Environment" perceived_by="//@Agent" name="camara" type="Other"/>
 </idemia:AgentModel>

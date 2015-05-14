@@ -13,7 +13,7 @@ public class EstadoAmbiente extends EnvironmentState {
     private int[] posicionDrone;
     //private Other listaCuadrantes;
 	
-    public EstadoAmbiente() {
+    public EstadoAmbiente(int esc) {
         
         //TODO: Complete Method
     	/*

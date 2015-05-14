@@ -286,4 +286,15 @@
     <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tx3ccPikEeSEu9TPHfx-jQ" id="(0.9243027888446215,0.027607361963190184)"/>
     <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tx3ccfikEeSEu9TPHfx-jQ" id="(0.4827586206896552,0.05828220858895705)"/>
   </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_a_aAIPmuEeS6f4XSbybb4w" type="4001" source="_naLbQPicEeSEu9TPHfx-jQ" target="_2nVdwPijEeSEu9TPHfx-jQ">
+    <children xmi:type="notation:DecorationNode" xmi:id="_a_jxIPmuEeS6f4XSbybb4w" type="6001">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_a_jxIfmuEeS6f4XSbybb4w" y="-10"/>
+    </children>
+    <styles xmi:type="notation:RoutingStyle" xmi:id="_a_aAIfmuEeS6f4XSbybb4w" routing="Rectilinear"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_a_aAIvmuEeS6f4XSbybb4w" fontName="Segoe UI"/>
+    <element xmi:type="idemia:Action" href="default.idemia#//@Actions.22"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_a_aAI_muEeS6f4XSbybb4w" points="[17, 7, -195, 10]$[181, 7, -31, 10]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_a_jxIvmuEeS6f4XSbybb4w" id="(0.9322709163346613,0.024539877300613498)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_a_jxI_muEeS6f4XSbybb4w" id="(0.11877394636015326,0.03067484662576687)"/>
+  </edges>
 </notation:Diagram>

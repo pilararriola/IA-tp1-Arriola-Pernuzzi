@@ -6,9 +6,9 @@ import frsf.cidisi.faia.environment.Environment;
 
 public class Ambiente extends Environment {
 
-    public Ambiente() {
+    public Ambiente(int escenario) {
         // Create the environment state
-        this.environmentState = new EstadoAmbiente();
+        this.environmentState = new EstadoAmbiente(escenario);
     }
 
     public EstadoAmbiente getEnvironmentState() {
@@ -26,8 +26,7 @@ public class Ambiente extends Environment {
         // Create a new perception to return
          DronePerception perception = new DronePerception();
 		
-		//Set the perceptions sensors
-         
+		//TODO : Set the perceptions sensors
         
         // Return the perception
         return perception;
