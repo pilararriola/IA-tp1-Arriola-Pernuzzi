@@ -14,6 +14,7 @@ public class EstadoDrone extends SearchBasedAgentState {
     private int[] esquinasAdyacentes;
     private int[] intensidadSenial;
     private boolean victimario;
+    private int[] vistaLineaRecta;
 	
 
     public EstadoDrone() {
@@ -52,6 +53,12 @@ public class EstadoDrone extends SearchBasedAgentState {
 		//Copiamos victimario
 		boolean victimarioCopia= this.getvictimario();
 		
+		//Copiamos vista línea recta
+		int[] vistaLineaRectaCopia= new int[9];
+		for(i=0;i<9;i++){
+			vistaLineaRectaCopia[i]=this.getvistaLineaRecta()[i];
+		}
+		
 		//Seteamos
 		nuevoEstado.setenergia(energiaCopia);
 		nuevoEstado.setposicion(posicionCopia);
@@ -70,8 +77,19 @@ public class EstadoDrone extends SearchBasedAgentState {
     public void updateState(Perception p) {
     	DronePerception dronePercepcion= (DronePerception) p; //seteamos a drone perception
         //Actualiza la posicion con el gps
+    	this.posicion = dronePercepcion.getgps();
+
         //Actualiza la intensidad de señales con la antena
-        //Actualiza esquinas adyacentes con la camara
+    	this.intensidadSenial = dronePercepcion.getantena();
+        
+    	//Actualiza esquinas adyacentes con la camara
+    	this.esquinasAdyacentes = obtenerEsquinasAdyacentes(dronePercepcion);
+    	
+    	//Actualiza vista en línea recta con la camara
+    	this.vistaLineaRecta = obtenerVistaLineaRecta(dronePercepcion);
+    	
+    	//Actualiza victimario con la camara
+    	if(this.vistaLineaRecta[0]==1) this.victimario = true;
     }
 
     /**
@@ -94,10 +112,10 @@ public class EstadoDrone extends SearchBasedAgentState {
 		posicion = new int[]{2,0,0,0}; //Siempre se inicia en el nivel alto, el resto se setea según el escenario
 		
 		/*
-		 esquinasAdyacentes: vector de 8 posiciones, que se corresponde a las 8 esquinas adyacentes 
-		 a la posicion actual del drone, si el mismo se encuentra en el nivel bajo, 
-		 segun las siguientes direcciones:
-		 [norte,noreste,este,sureste,sur,suroeste,oeste,noroeste]
+		 esquinasAdyacentes: vector de 9 posiciones que se utiliza cuando el drone está ubicado en
+		 el nivel bajo. La primera posición se refiere a la esquina donde se encuentra el drone 
+		 y, el resto, a las 8 esquinas adyacentes segun las siguientes direcciones:
+		 [esquina actual, norte,noreste,este,sureste,sur,suroeste,oeste,noroeste]
 		 El contenido en cada posicion del array sera:
 		 -idEsquina si puede trasladarse en esa direccion
 		 -0 caso contrario
@@ -105,6 +123,12 @@ public class EstadoDrone extends SearchBasedAgentState {
 		esquinasAdyacentes= new int[]{0,0,0,0,0,0,0,0,0}; //Se va a setear cuando se llegue al nivel bajo
 		intensidadSenial = new int[]{0,0,0,0};//Se debería setear de acuerdoo al escenario
 		victimario= false;
+		
+		/*
+		  Vector que indica si el victimario se encuentra en las posiciones adyacentes al drone, 
+		  incluyendo la posición del mismo
+		 */
+		vistaLineaRecta=new int[]{0,0,0,0,0,0,0,0,0};
 
     }
 
@@ -116,6 +140,7 @@ public class EstadoDrone extends SearchBasedAgentState {
     	int[] pos= this.getposicion();
     	int[] esqAdy= this.getesquinasAdyacentes() ;
     	int[] seniales= this.getintensidadSenial();
+    	int[] vista= this.getvistaLineaRecta();
         String str = "----- ESTADO DEL DRONE -----\n";
         str += "Nivel: " + pos[0] + "\n"
         	+  "Cuadrante: "+ pos[1] + "\n" 
@@ -134,7 +159,14 @@ public class EstadoDrone extends SearchBasedAgentState {
         	if(i<3)str += " , ";
         }
         str += ")\n" 
-        	+ "Victimario encontrado: "+ this.getvictimario()+ "\n";
+        	+ "Victimario encontrado: "+ this.getvictimario()+ "\n"
+        	+ "Intensidad señales recibidas: (";
+        for(int i=0;i<9;i++){
+        	str += vista[i];
+        	if(i<8)str += " , ";
+        }
+        str += ")\n";
+        
         return str;
     }
 
@@ -155,7 +187,21 @@ public class EstadoDrone extends SearchBasedAgentState {
         return false;
         
     }
-
+    
+    private int[] obtenerEsquinasAdyacentes(DronePerception p){
+    	int[] arrayAux= new int[9];
+    	for(int i=0;i<9;i++){
+    		arrayAux[i]=p.getcamara()[0][i];	
+    	}
+    	return arrayAux;
+    }
+    private int[] obtenerVistaLineaRecta(DronePerception p){
+    	int[] arrayAux= new int[9];
+    	for(int i=0;i<9;i++){
+    		arrayAux[i]=p.getcamara()[1][i];	
+    	}
+    	return arrayAux;
+    }
     
     // The following methods are agent-specific:
    	
@@ -189,6 +235,12 @@ public class EstadoDrone extends SearchBasedAgentState {
      public void setvictimario(boolean arg){
         victimario = arg;
      }
+     public int[] getvistaLineaRecta(){
+         return vistaLineaRecta;
+      }
+	  public void setvistaLineaRecta(int[] arg){
+		  vistaLineaRecta = arg;
+	  }
 	
 }
 

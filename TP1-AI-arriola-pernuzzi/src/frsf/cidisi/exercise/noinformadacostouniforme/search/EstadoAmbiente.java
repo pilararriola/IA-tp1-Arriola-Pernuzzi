@@ -1,5 +1,9 @@
 package frsf.cidisi.exercise.noinformadacostouniforme.search;
 
+import java.util.ArrayList;
+
+import frsf.cidisi.exercise.entidades.Cuadrante;
+import frsf.cidisi.exercise.entidades.Esquina;
 import frsf.cidisi.faia.state.EnvironmentState;
 
 /**
@@ -7,11 +11,10 @@ import frsf.cidisi.faia.state.EnvironmentState;
  */
 public class EstadoAmbiente extends EnvironmentState {
 	
-	//TODO: Setup Variables
-    //private Other mapa;
+    private static ArrayList<Esquina> mapa;
     private int posicionVictimario;
     private int[] posicionDrone;
-    //private Other listaCuadrantes;
+    private static ArrayList<Cuadrante> listaCuadrantes;
 	
     public EstadoAmbiente(int esc) {
         
@@ -49,12 +52,12 @@ public class EstadoAmbiente extends EnvironmentState {
 	//TODO: Complete this section with agent-specific methods
     // The following methods are agent-specific:
 	
-//     public Other getmapa(){
-//        return mapa;
-//     }
-//     public void setmapa(Other arg){
-//        mapa = arg;
-//     }
+	public ArrayList<Esquina> getmapa(){
+    	return mapa;
+     }
+     public void setmapa(ArrayList<Esquina> arg){
+    	 mapa = arg;
+     }
      public int getposicionVictimario(){
         return posicionVictimario;
      }
@@ -67,12 +70,12 @@ public class EstadoAmbiente extends EnvironmentState {
      public void setposicionDrone(int[] arg){
         posicionDrone = arg;
      }
-//     public Other getlistaCuadrantes(){
-//        return listaCuadrantes;
-//     }
-//     public void setlistaCuadrantes(Other arg){
-//        listaCuadrantes = arg;
-//     }
+     public ArrayList<Cuadrante> getlistaCuadrantes(){
+        return listaCuadrantes;
+     }
+     public void setlistaCuadrantes(ArrayList<Cuadrante> arg){
+        listaCuadrantes = arg;
+     }
 	
 
 }
