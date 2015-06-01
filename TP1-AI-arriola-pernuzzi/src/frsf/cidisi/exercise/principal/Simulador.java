@@ -15,7 +15,7 @@ import frsf.cidisi.faia.simulator.events.SimulatorEventNotifier;
 
 public class Simulador extends SearchBasedAgentSimulator {
 		
-		//private boolean terminado;
+		private boolean terminado;
 		
 		private Perception perception;
 		private Action action;
@@ -23,16 +23,14 @@ public class Simulador extends SearchBasedAgentSimulator {
 
 	    public Simulador(Environment environment, Agent agent) {
 	    	super(environment, new Vector<Agent>(Arrays.asList(agent)));
-	        //terminado = false;
+	        terminado = false;
 	    }
 	    
 	    public void comenzar() {
-	        System.out.println("Simulador seleccionado:"+ this.getSimulatorName());
-	        System.out.println();
-	        //ConfiguradorEstrategia.setSimulador(this);
+	        ConfiguradorEstrategia.setSimulador(this);
 	    }
 	    
-	    /*public int avanzar() {
+	    public int avanzar() {
 	    	if (this.terminado)
 	    		return 1;
 	    	
@@ -53,21 +51,10 @@ public class Simulador extends SearchBasedAgentSimulator {
 
 	        if (action == null) {
 	        	this.terminado = true;
+	        	return 1;
 	        }
-
-	        System.out.println("Action returned: " + action);
-	        System.out.println();
-	        InterfazManager.registrarEvento(action.toString());
-
+	        System.out.println(action.toString());
 	        this.actionReturned(agent, action);
-	        
-	        ArqueologoEstado estado = (ArqueologoEstado) agent.getAgentState();
-	        IslaEstado ambiente = (IslaEstado) environment.getEnvironmentState();
-	        
-	        InterfazManager.mostrarAgentes(estado.getaldeaPos(), ambiente.getPirataPos());
-	        InterfazManager.actualizarInventario(estado.getbotin());
-	        InterfazManager.actualizarDatos(estado.getkmRecorridos(), estado.getValorBotin(), estado.getPesoBotin());
-	        InterfazManager.actualizarIsla(ambiente.gettesorosAldeas());
 	        
 	        if (this.agentSucceeded(action) || this.agentFailed(action)) {
 	        	this.terminado = true;
@@ -88,7 +75,8 @@ public class Simulador extends SearchBasedAgentSimulator {
 	        this.environment.close();
 	        // Launch simulationFinished event
 	        SimulatorEventNotifier.runEventHandlers(EventType.SimulationFinished, null);
-	    }*/
+	    }
+	   
 		
 }
 

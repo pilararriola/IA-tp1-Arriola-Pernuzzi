@@ -11,17 +11,6 @@ import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrSurEste;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrEste;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNorEste;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNorte;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNivelAlto;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNivelMedio;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNivelBajo;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNorOeste;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrOeste;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrSurOeste;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrSur;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrSurEste;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrEste;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNorEste;
-import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IrNorte;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.actions.IdentificarVictimario;
 
 import frsf.cidisi.faia.agent.Perception;
@@ -46,10 +35,9 @@ public class Drone extends SearchBasedAgent {
         this.setAgentState(agState);
 
         // Operadores
-        Vector<SearchAction> operators = new Vector<SearchAction>();	
-        operators.addElement(new IrNivelAlto());	
-        operators.addElement(new IrNivelMedio());	
-        operators.addElement(new IrNivelBajo());	
+        Vector<SearchAction> operators = new Vector<SearchAction>();		
+        
+        operators.addElement(new IdentificarVictimario());	
         operators.addElement(new IrNorOeste());	
         operators.addElement(new IrOeste());	
         operators.addElement(new IrSurOeste());	
@@ -57,8 +45,11 @@ public class Drone extends SearchBasedAgent {
         operators.addElement(new IrSurEste());	
         operators.addElement(new IrEste());	
         operators.addElement(new IrNorEste());	
-        operators.addElement(new IrNorte());	
-        operators.addElement(new IdentificarVictimario());	
+        operators.addElement(new IrNorte());
+        operators.addElement(new IrNivelBajo());
+        operators.addElement(new IrNivelMedio());
+        operators.addElement(new IrNivelAlto());
+
 
         // Se define el problema que el agente debe resolver
         Problem problem = new Problem(agGoal, agState, operators);
@@ -78,9 +69,11 @@ public class Drone extends SearchBasedAgent {
         // Create a Search object with the strategy
         Search searchSolver = new Search(strategy);
 
+
         /* Generate an XML file with the search tree. It can also be generated
          * in other formats like PDF with PDF_TREE */
-        searchSolver.setVisibleTree(Search.GRAPHVIZ_TREE);
+        searchSolver.setVisibleTree(Search.EFAIA_TREE);
+        
 
         // Set the Search searchSolver.
         this.setSolver(searchSolver);

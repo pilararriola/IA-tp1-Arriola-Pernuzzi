@@ -1,5 +1,4 @@
 package frsf.cidisi.exercise.noinformadaprofundidad.search.actions;
-
 import frsf.cidisi.exercise.noinformadaprofundidad.search.*;
 import frsf.cidisi.faia.agent.search.SearchAction;
 import frsf.cidisi.faia.agent.search.SearchBasedAgentState;
@@ -7,7 +6,8 @@ import frsf.cidisi.faia.state.AgentState;
 import frsf.cidisi.faia.state.EnvironmentState;
 
 public class IdentificarVictimario extends SearchAction {
-
+	private static final double CostoIdentificar = 0;
+	
     /**
      * This method updates a tree node state when the search process is running.
      * It does not updates the real world state.
@@ -16,10 +16,14 @@ public class IdentificarVictimario extends SearchAction {
     public SearchBasedAgentState execute(SearchBasedAgentState s) {
         EstadoDrone agState = (EstadoDrone) s;
         
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
+        //Para poder identificar al victimario tiene que estar en el nivel bajo
+        if(agState.getposicion()[0]==0){
+        	if(agState.getlistaEsquinasIdentificadas()[agState.getposicion()[3]]==0){
+        		agState.incrementarEnergiaUsada(CostoIdentificar);
+	        	agState.identificarVictimario();
+	    		return agState;
+        	}
+        }
         return null;
     }
 
@@ -31,18 +35,14 @@ public class IdentificarVictimario extends SearchAction {
         EstadoAmbiente environmentState = (EstadoAmbiente) est;
         EstadoDrone agState = ((EstadoDrone) ast);
 
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
-        if (true) {
-            // Update the real world
-            
-            // Update the agent state
-            
-            return environmentState;
+        //Para poder identificar al victimario tiene que estar en el nivel bajo
+        if(agState.getposicion()[0]==0){
+        	if(agState.getlistaEsquinasIdentificadas()[agState.getposicion()[3]]==0){
+            	agState.identificarVictimario();
+            	environmentState.identificarVictimario();
+        		return environmentState;
+        	}
         }
-
         return null;
     }
 

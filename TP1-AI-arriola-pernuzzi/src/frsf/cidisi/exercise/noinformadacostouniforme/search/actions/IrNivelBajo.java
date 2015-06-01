@@ -7,7 +7,7 @@ import frsf.cidisi.faia.state.AgentState;
 import frsf.cidisi.faia.state.EnvironmentState;
 
 public class IrNivelBajo extends SearchAction {
-
+	private static final double CostoBajar = 100;
     /**
      * This method updates a tree node state when the search process is running.
      * It does not updates the real world state.
@@ -16,10 +16,14 @@ public class IrNivelBajo extends SearchAction {
     public SearchBasedAgentState execute(SearchBasedAgentState s) {
         EstadoDrone agState = (EstadoDrone) s;
         
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
+        if(1000-agState.getenergiaUsada()>=CostoBajar){
+	        //Sólo podrá ir al nivel alto si se encuentra en el nivel medio
+	        if(agState.getposicion()[0]==1){
+	            agState.incrementarEnergiaUsada(CostoBajar);
+	        	agState.irNivelBajo();
+	    		return agState;
+	        }
+        }
         return null;
     }
 
@@ -31,18 +35,12 @@ public class IrNivelBajo extends SearchAction {
         EstadoAmbiente environmentState = (EstadoAmbiente) est;
         EstadoDrone agState = ((EstadoDrone) ast);
 
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
-        if (true) {
-            // Update the real world
-            
-            // Update the agent state
-            
-            return environmentState;
+        //Sólo podrá ir al nivel bajo si se encuentra en el nivel medio
+        if(agState.getposicion()[0]==1){
+        	agState.irNivelBajo();
+        	environmentState.irNivelBajo();
+    		return environmentState;
         }
-
         return null;
     }
 

@@ -1,5 +1,10 @@
 package frsf.cidisi.exercise.noinformadacostouniforme.search;
 
+import java.util.ArrayList;
+
+import frsf.cidisi.exercise.entidades.Cuadrante;
+import frsf.cidisi.exercise.entidades.Esquina;
+import frsf.cidisi.exercise.entidades.Mapa;
 import frsf.cidisi.faia.agent.Perception;
 import frsf.cidisi.faia.agent.search.SearchBasedAgentState;
 
@@ -9,13 +14,16 @@ import frsf.cidisi.faia.agent.search.SearchBasedAgentState;
 public class EstadoDrone extends SearchBasedAgentState {
 	
 	//Variables de estado
-    private int energia;
+    private double energiaUsada;
     private int[] posicion;
     private int[] esquinasAdyacentes;
     private int[] intensidadSenial;
     private boolean victimario;
     private int[] vistaLineaRecta;
-	
+    private ArrayList<Esquina> listaEsquinasEnDrone;
+    private ArrayList<Cuadrante> listaCuadrantesEnDrone;
+    private int[] listaEsquinasVisitadas;
+    private int[] listaEsquinasIdentificadas;
 
     public EstadoDrone() {
     
@@ -30,8 +38,8 @@ public class EstadoDrone extends SearchBasedAgentState {
     public SearchBasedAgentState clone() {
     	int i;
     	EstadoDrone nuevoEstado= new EstadoDrone();
-		//Copiamos la energia
-		int energiaCopia= this.getenergia();
+		//Copiamos la energia usada
+		double energiaUsadaCopia= this.getenergiaUsada();
 		
 		//Copiamos la posicion
 		int [] posicionCopia= new int[4]; 
@@ -59,17 +67,34 @@ public class EstadoDrone extends SearchBasedAgentState {
 			vistaLineaRectaCopia[i]=this.getvistaLineaRecta()[i];
 		}
 		
+		//Copiamos la lista de esquinas identificadas hasta el momento
+		int[] listaEsquinasIdentificadasCopia= new int[79];
+		for(i=0;i<79;i++){
+			listaEsquinasIdentificadasCopia[i]=getlistaEsquinasIdentificadas()[i];
+		}
+
+		//Copiamos la lista de esquinas visitadas hasta el momento
+		int[] listaEsquinasVisitadasCopia= new int[79];
+		for(i=0;i<79;i++){
+			listaEsquinasVisitadasCopia[i]=getlistaEsquinasVisitadas()[i];
+		}
+		
 		//Seteamos
-		nuevoEstado.setenergia(energiaCopia);
+		nuevoEstado.setenergiaUsada(energiaUsadaCopia);
 		nuevoEstado.setposicion(posicionCopia);
 		nuevoEstado.setesquinasAdyacentes(esquinasAdyacentesCopia);
 		nuevoEstado.setintensidadSenial(intensidadSenialCopia);
 		nuevoEstado.setvictimario(victimarioCopia);
-		
+		nuevoEstado.setvistaLineaRecta(vistaLineaRectaCopia);		
+		nuevoEstado.setlistaEsquinasEnDrone(this.getlistaEsquinasEnDrone());
+		nuevoEstado.setlistaCuadrantesEnDrone(this.getlistaCuadrantesEnDrone());
+		nuevoEstado.setlistaEsquinasIdentificadas(listaEsquinasIdentificadasCopia);
+		nuevoEstado.setlistaEsquinasVisitadas(listaEsquinasVisitadasCopia);
         return nuevoEstado;
     }
 
-    /**
+
+	/**
      * This method is used to update the Agent State when a Perception is
      * received by the Simulator.
      */
@@ -97,8 +122,7 @@ public class EstadoDrone extends SearchBasedAgentState {
      */
     @Override
     public void initState() {
-        
-    	energia = 1000; //energia inicial
+    	energiaUsada = 0; //Al comienzo la energia utilizada es cero 
 		
 		/*
 		  Posicion: vector de 4 valores que se corresponden con:
@@ -129,10 +153,37 @@ public class EstadoDrone extends SearchBasedAgentState {
 		  incluyendo la posición del mismo
 		 */
 		vistaLineaRecta=new int[]{0,0,0,0,0,0,0,0,0};
-
+		
+		/*
+		 Se setea la lista de esquinas tal cual está en el mapa para poder tener las esquinas adyacentes
+		 a una esquina actual en el nivel bajo 
+		 */
+		Mapa mapaEnDrone = new Mapa();
+		listaEsquinasEnDrone=new ArrayList<Esquina>();
+		listaEsquinasEnDrone=mapaEnDrone.getListaEsquinas();
+		listaCuadrantesEnDrone=new ArrayList<Cuadrante>();
+		listaCuadrantesEnDrone= mapaEnDrone.getListaCuadrantes();
+		/*
+		 Array de enteros que indica si la esquina con el id correspondiente
+		 a su posición fue identificada o no.
+		 El índice 0 queda con el valor 0 porque no representa a ninguna esquina.
+		 Desde el índice 1 hasta el 78 se representa cada una de las esquinas.
+		 */
+		listaEsquinasIdentificadas=new int[79];
+		for(int i=0;i<79;i++)listaEsquinasIdentificadas[i]=0;	
+		/*
+		 Array de enteros que indica si la esquina con el id correspondiente
+		 a su posición fue visitada o no y, de ser así, cuántas veces.
+		 El índice 0 queda con el valor 0 porque no representa a ninguna esquina.
+		 Desde el índice 1 hasta el 78 se representa cada una de las esquinas.
+		 */
+		listaEsquinasVisitadas=new int[79];
+		for(int i=0;i<79;i++)listaEsquinasVisitadas[i]=0;	
     }
 
-    /**
+
+
+	/**
      * This method returns the String representation of the agent state.
      */
     @Override
@@ -146,7 +197,7 @@ public class EstadoDrone extends SearchBasedAgentState {
         	+  "Cuadrante: "+ pos[1] + "\n" 
         	+  "Subcuadrante: "+ pos[2] + "\n"  
         	+  "Esquina: "+ pos[3] + "\n" 
-        	+  "Energia: "+ this.getenergia() + "\n" 
+        	+  "Energia usada: "+ this.getenergiaUsada() + "\n" 
         	+  "Esquinas adyacentes: (";
         for(int i=0;i<9;i++){
         	str += esqAdy[i];
@@ -165,8 +216,19 @@ public class EstadoDrone extends SearchBasedAgentState {
         	str += vista[i];
         	if(i<8)str += " , ";
         }
+        str += ")\n"
+        	+ "Esquinas identificadas: (";
+        for(int i=1;i<79;i++){
+        	str += listaEsquinasIdentificadas[i];
+        	if(i<78)str += " , ";
+        }
+        str += ")\n"
+        	+ "Esquinas visitadas: (";
+        for(int i=1;i<79;i++){
+        	str += listaEsquinasVisitadas[i];
+        	if(i<78)str += " , ";
+        }
         str += ")\n";
-        
         return str;
     }
 
@@ -176,16 +238,38 @@ public class EstadoDrone extends SearchBasedAgentState {
      */
     @Override
     public boolean equals(Object obj) {
-       
-    	//Si es instancia de EstadoDrone y la posición es la misma, el objeto va a ser igual
-        if ((obj instanceof EstadoDrone)) {
-        	if(((EstadoDrone) obj).getposicion() == this.getposicion()){
-        		return true;
+    	//Si el estado del agente perteneciente al nodo que se quiere comparar 
+    	//con el actual es instancia de EstadoDrone, su posición es la misma y 
+    	//contiene los mismos arrays de esquinas identificadas y visitadas, va a ser igual
+
+        if (!(obj instanceof EstadoDrone)) {
+        	return false; //No es igual porque no es instancia
+        }	
+        
+    	
+        for(int i=0; i<4;i++){
+        	if(((EstadoDrone) obj).getposicion()[i] != this.getposicion()[i]){
+        		return false; //Si no coinciden las posiciones es distinto
+        	}
+        }   
+        
+       //Comparar el siguiente array permite que no se eliminen los nodos de la acción 
+        //Identificar victimario (que coinciden en el resto con el nodo que se haya guardado
+        //apenas se llegó a la esquina)
+        for(int i=0; i<79;i++){
+        	if(((EstadoDrone) obj).getlistaEsquinasIdentificadas()[i] != this.getlistaEsquinasIdentificadas()[i]){
+        		return false; 
         	}
         }
-        //Si no se cumplen las dos condiciones anteriores, retorna false
-        return false;
         
+        for(int i=0; i<79;i++){
+        	if(((EstadoDrone) obj).getlistaEsquinasVisitadas()[i] != this.getlistaEsquinasVisitadas()[i]){
+        		return false;
+        	}
+        }
+
+        //Si no se cumplen las dos condiciones anteriores, retorna que es igual
+        return true;    
     }
     
     private int[] obtenerEsquinasAdyacentes(DronePerception p){
@@ -203,13 +287,17 @@ public class EstadoDrone extends SearchBasedAgentState {
     	return arrayAux;
     }
     
+   
     // The following methods are agent-specific:
    	
-     public int getenergia(){
-        return energia;
+     public double getenergiaUsada(){
+        return energiaUsada;
      }
-     public void setenergia(int arg){
-        energia = arg;
+     public void setenergiaUsada(double arg){
+        energiaUsada = arg;
+     }
+     public void incrementarEnergiaUsada(double costodesplazamiento){
+    	 this.energiaUsada += costodesplazamiento;
      }
      public int[] getposicion(){
         return posicion;
@@ -241,6 +329,310 @@ public class EstadoDrone extends SearchBasedAgentState {
 	  public void setvistaLineaRecta(int[] arg){
 		  vistaLineaRecta = arg;
 	  }
+     public ArrayList<Esquina> getlistaEsquinasEnDrone(){
+         return listaEsquinasEnDrone;
+      }
+	  public void setlistaEsquinasEnDrone(ArrayList<Esquina> arg){
+		  listaEsquinasEnDrone = arg;
+	  }
+     public ArrayList<Cuadrante> getlistaCuadrantesEnDrone(){
+         return listaCuadrantesEnDrone;
+      }
+	  public void setlistaCuadrantesEnDrone(ArrayList<Cuadrante> arg){
+		  listaCuadrantesEnDrone = arg;
+	  }
+
+	  public int[] getlistaEsquinasIdentificadas() {
+			return listaEsquinasIdentificadas;	
+	  }
+	  public void setlistaEsquinasIdentificadas(int[] arg){
+		  listaEsquinasIdentificadas = arg;
+	  }
+	  public int[] getlistaEsquinasVisitadas() {
+			return listaEsquinasVisitadas;	
+	  }
+	  public void setlistaEsquinasVisitadas(int[] arg){
+		  listaEsquinasVisitadas = arg;
+	  }
 	
+	public void irNorte() {
+		switch(this.posicion[0]){
+		case 2: //Nivel alto
+			//Si me muevo al norte, voy hacia el cuadrante 1 o 2
+        	this.posicion[1]-=2;
+        	break;
+        case 1: //Nivel medio
+        	//Si estoy en un subcuadrante 3 o 4 y me muevo al norte, paso al sucuadrante superior
+        	this.posicion[2]-=2;
+        	break;
+        case 0: //Nivel bajo
+        	//Saca el id de la nueva esquina a la que se debe mover 
+        	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
+        	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[0];//Depende de la orientación
+        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	this.posicion[3] = nuevaEsquina;
+        	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
+        	//Setea el array esquinas adyacentes que está en el estado del drone
+        	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera
+        	this.esquinasAdyacentes[0]=nuevaEsquina;
+        	for(int i=0;i<8;i++){
+        		this.esquinasAdyacentes[i+1]=nuevosAdyacentes[i];
+        	}
+        	break;
+        }
+	}
+	public void irNorEste() {
+		switch(this.posicion[0]){
+		case 2: //Nivel alto
+			//Si me muevo al noreste, voy hacia el cuadrante 2
+        	this.posicion[1]-=1;
+        	break;
+        case 1: //Nivel medio
+        	//Si estoy en un subcuadrante 1 o 3 y me muevo al este, paso al sucuadrante siguiente
+        	this.posicion[2]-=1;
+        	break;
+        case 0: //Nivel bajo
+        	//Nunca va a entrar a esta opción
+        	break;
+        }
+		
+	}
+	public void irEste() {
+		switch(this.posicion[0]){
+		case 2: //Nivel alto
+			//Si me muevo al este, voy hacia el cuadrante 2 o 4
+        	this.posicion[1]+=1;
+        	break;
+        case 1: //Nivel medio
+        	//Si estoy en un subcuadrante 1 o 3 y me muevo al este, paso al sucuadrante siguiente
+        	this.posicion[2]+=1;
+        	break;
+        case 0: //Nivel bajo
+        	//Saca el id de la nueva esquina a la que se debe mover 
+        	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
+        	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[2];//Depende de la orientación
+        	listaEsquinasVisitadas[nuevaEsquina] = 1;
+        	this.posicion[3] = nuevaEsquina;
+        	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
+        	//Setea el array esquinas adyacentes que está en el estado del drone
+        	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera
+        	this.esquinasAdyacentes[0]=nuevaEsquina;
+        	for(int i=0;i<8;i++){
+        		this.esquinasAdyacentes[i+1]=nuevosAdyacentes[i];
+        	}
+        	break;
+        }
+	}
+
+	public void irSurEste() {
+		switch(this.posicion[0]){
+		case 2: //Nivel alto
+			//Si me muevo al sureste, voy hacia el cuadrante 4
+        	this.posicion[1]+=3;
+        	break;
+        case 1: //Nivel medio
+        	//Si estoy en un subcuadrante 1  y me muevo al sureste, paso al sucuadrante 4
+        	this.posicion[2]+=3;
+        	break;
+        case 0: //Nivel bajo
+        	//Saca el id de la nueva esquina a la que se debe mover 
+        	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
+        	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[3];//Depende de la orientación
+        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	this.posicion[3] = nuevaEsquina;
+        	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
+        	//Setea el array esquinas adyacentes que está en el estado del drone
+        	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera
+        	this.esquinasAdyacentes[0]=nuevaEsquina;
+        	for(int i=0;i<8;i++){
+        		this.esquinasAdyacentes[i+1]=nuevosAdyacentes[i];
+        	}
+        	break;
+        }	
+	}
+
+	public void irSur() {
+		switch(this.posicion[0]){
+		case 2: //Nivel alto
+			//Si me muevo al sur, voy hacia el cuadrante 3 o 4
+        	this.posicion[1]+=2;
+        	break;
+        case 1: //Nivel medio
+        	//Si me muevo al sur, paso a los subcuadrantes 3 o 4
+        	this.posicion[2]+=2;
+        	break;
+        case 0: //Nivel bajo
+        	//Saca el id de la nueva esquina a la que se debe mover 
+        	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
+        	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[4];//Depende de la orientación
+        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	this.posicion[3] = nuevaEsquina;
+        	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
+        	//Setea el array esquinas adyacentes que está en el estado del drone
+        	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera
+        	this.esquinasAdyacentes[0]=nuevaEsquina;
+        	for(int i=0;i<8;i++){
+        		this.esquinasAdyacentes[i+1]=nuevosAdyacentes[i];
+        	}
+        	break;
+        }	
+		
+	}
+
+	public void irSurOeste() {
+		switch(this.posicion[0]){
+		case 2: //Nivel alto
+			//Si me muevo al suroeste, voy hacia el cuadrante 3
+        	this.posicion[1]+=1;
+        	break;
+        case 1: //Nivel medio
+        	//Si estoy en un subcuadrante 2  y me muevo al sureste, paso al sucuadrante 3
+        	this.posicion[2]+=1;
+        	break;
+        case 0: //Nivel bajo
+        	//Saca el id de la nueva esquina a la que se debe mover 
+        	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
+        	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[5];//Depende de la orientación
+        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	this.posicion[3] = nuevaEsquina;
+        	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
+        	//Setea el array esquinas adyacentes que está en el estado del drone
+        	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera
+        	this.esquinasAdyacentes[0]=nuevaEsquina;
+        	for(int i=0;i<8;i++){
+        		this.esquinasAdyacentes[i+1]=nuevosAdyacentes[i];
+        	}
+        	break;
+        }	
+	}
+
+	public void irOeste() {
+		switch(this.posicion[0]){
+		case 2: //Nivel alto
+			//Si me muevo al oeste, voy hacia los cuadrantes 1 o 3
+        	this.posicion[1]-=1;
+        	break;
+        case 1: //Nivel medio
+        	//Si me muevo al oeste dentro de un cuadrante, voy hacia los subcuadrantes 1 o 3 
+        	this.posicion[2]-=1;
+        	break;
+        case 0: //Nivel bajo
+        	//Saca el id de la nueva esquina a la que se debe mover 
+        	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
+        	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[6];//Depende de la orientación
+        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	this.posicion[3] = nuevaEsquina;
+        	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
+        	//Setea el array esquinas adyacentes que está en el estado del drone
+        	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera
+        	this.esquinasAdyacentes[0]=nuevaEsquina;
+        	for(int i=0;i<8;i++){
+        		this.esquinasAdyacentes[i+1]=nuevosAdyacentes[i];
+        	}
+        	break;
+        }	
+	}
+
+	public void irNorOeste() {
+		switch(this.posicion[0]){
+		case 2: //Nivel alto
+			//Si me muevo al noroeste, voy hacia el cuadrante 1
+        	this.posicion[1]-=3;
+        	break;
+        case 1: //Nivel medio
+        	//Si me muevo al noroeste dentro de un cuadrante, voy hacia el subcuadrante 1
+        	this.posicion[2]-=3;
+        	break;
+        case 0: //Nivel bajo
+        	//Saca el id de la nueva esquina a la que se debe mover 
+        	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
+        	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[7];//Depende de la orientación
+        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	this.posicion[3] = nuevaEsquina;
+        	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
+        	//Setea el array esquinas adyacentes que está en el estado del drone
+        	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera
+        	this.esquinasAdyacentes[0]=nuevaEsquina;
+        	for(int i=0;i<8;i++){
+        		this.esquinasAdyacentes[i+1]=nuevosAdyacentes[i];
+        	}
+        	break;
+        }	
+	}
+
+	public void irNivelAlto() {
+		//Se mantiene en el mismo cuadrante, sólo sube
+		this.posicion[0]=2;
+		//Se vuelve a setear el subcuadrante en 0
+		this.posicion[2]=0;
+	}
+
+	public void irNivelMedio() {
+		int altitud=this.posicion[0];
+		this.posicion[0]=1;//Se cambia la altitud (tanto si viene del nivel alto como del bajo)
+		if(altitud==2){//Desde nivel alto
+			//Se posiciona en el primer subcuadrante (arriba a la izquierda)
+			this.posicion[2]=1;
+		}
+		if(altitud==0){//Desde nivel bajo
+			//Se se vuelve a setear la esquina en 0
+			this.posicion[3]=0;
+		}
+
+	}
+
+	public void irNivelBajo() {
+		//Baja de nivel
+		this.posicion[0]=0;
+		int subcuadrante=this.posicion[2];
+		//Asigna la esquina en la que debe bajar según el subcuadrante en el que se encuentra
+		switch(this.posicion[1]){
+		case 1:
+			if(subcuadrante==1)this.posicion[3]=2;
+			else if(subcuadrante==2)this.posicion[3]=10;
+			else if(subcuadrante==3)this.posicion[3]=29;
+			else this.posicion[3]=31;
+			break;
+		case 2:
+			if(subcuadrante==1)this.posicion[3]=12;
+			else if(subcuadrante==2)this.posicion[3]=14;
+			else if(subcuadrante==3)this.posicion[3]=33;
+			else this.posicion[3]=35;
+			break;
+		case 3:
+			if(subcuadrante==1)this.posicion[3]=38;
+			else if(subcuadrante==2)this.posicion[3]=40;
+			else if(subcuadrante==3)this.posicion[3]=61;
+			else this.posicion[3]=63;
+			break;
+		case 4:
+			if(subcuadrante==1)this.posicion[3]=47;
+			else if(subcuadrante==2)this.posicion[3]=49;
+			else if(subcuadrante==3)this.posicion[3]=66;
+			else this.posicion[3]=68;
+			break;
+		}
+    	int nuevaEsquina= this.posicion[3];
+    	listaEsquinasVisitadas[nuevaEsquina] =1;
+    	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
+    	//Setea el array esquinas adyacentes que está en el estado del drone
+    	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera
+    	this.esquinasAdyacentes[0]=nuevaEsquina;
+    	for(int i=0;i<8;i++){
+    		this.esquinasAdyacentes[i+1]=nuevosAdyacentes[i];
+    	}
+	}
+
+	public void identificarVictimario() {
+		Esquina esquinaActual=this.listaEsquinasEnDrone.get(posicion[3]-1);
+		if(esquinaActual.getcontieneVictimario()){
+			this.victimario=true;
+		}
+		else{
+			listaEsquinasIdentificadas[posicion[3]]=1;
+		}
+		
+	}
+
 }
 

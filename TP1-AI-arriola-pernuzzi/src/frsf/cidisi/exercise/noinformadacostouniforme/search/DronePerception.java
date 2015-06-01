@@ -27,11 +27,11 @@ public class DronePerception extends Perception {
  
 
     public  DronePerception() {
+    	super();
     }
 
     public DronePerception(Agent agent, Environment environment) {
         super(agent, environment);
-      
     }
 
     /**
@@ -47,15 +47,39 @@ public class DronePerception extends Perception {
         this.gps = environmentState.getposicionDrone();
         this.antena = obtenerSeniales(environmentState);
         this.camara = obtenerEsquinas(environmentState);
-        
     }
     
     @Override
     public String toString() {
         StringBuffer str = new StringBuffer();
 
-        //TODO: Complete Method
-
+        str.append(" ---- Percepción del Drone ----\n");
+        str.append("gps: (");
+        int i=0;
+        for(i=0; i<4;i++){
+        	str.append(gps[i]);
+        	if(i<3)str.append(", ");
+        }
+        str.append(") \n");
+        str.append("Antena: (");
+        for(i=0; i<4;i++){
+        	str.append(antena[i]);
+        	if(i<3)str.append(", ");
+        }
+        str.append(") \n");
+        str.append("        Cámara [0]\n");
+        str.append("- Esquinas: (");
+        for(i=0; i<9;i++){
+        	str.append(camara[0][i]);
+        	if(i<8)str.append(", ");
+        }
+        str.append(") \n");
+        str.append("- Victimario en esquina: (");
+        for(i=0; i<9;i++){
+        	str.append(camara[1][i]);
+        	if(i<8)str.append(", ");
+        }
+        str.append(") \n\n");
         return str.toString();
     }
     
@@ -118,7 +142,7 @@ public class DronePerception extends Perception {
     			break;
     		default://Si el drone no está en el nivel bajo, la cámara no puede tomar datos
     			for(i=0;i<2;i++){
-    				for(int j=0;j<9;i++){
+    				for(int j=0;j<9;j++){
     					matrizAux[i][j]=0;
     				}
     			}

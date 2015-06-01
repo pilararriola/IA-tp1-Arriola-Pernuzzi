@@ -7,7 +7,7 @@ import frsf.cidisi.faia.state.AgentState;
 import frsf.cidisi.faia.state.EnvironmentState;
 
 public class IrNivelBajo extends SearchAction {
-
+	private static final double CostoBajar = 0;
     /**
      * This method updates a tree node state when the search process is running.
      * It does not updates the real world state.
@@ -15,11 +15,47 @@ public class IrNivelBajo extends SearchAction {
     @Override
     public SearchBasedAgentState execute(SearchBasedAgentState s) {
         EstadoDrone agState = (EstadoDrone) s;
-        
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
+
+	        if(1000-agState.getenergiaUsada()>=CostoBajar){
+		        //Sólo podrá ir al nivel alto si se encuentra en el nivel medio
+		        if(agState.getposicion()[0]==1){
+		    		int subcuadrante=agState.getposicion()[2];
+		    		int nuevaEsquina=0;
+		    		//Asigna la esquina en la que debe bajar según el subcuadrante en el que se encuentra
+		    		switch(agState.getposicion()[1]){
+		    		case 1:
+		    			if(subcuadrante==1)nuevaEsquina=2;
+		    			else if(subcuadrante==2)nuevaEsquina=10;
+		    			else if(subcuadrante==3)nuevaEsquina=29;
+		    			else nuevaEsquina=31;
+		    			break;
+		    		case 2:
+		    			if(subcuadrante==1)nuevaEsquina=12;
+		    			else if(subcuadrante==2)nuevaEsquina=14;
+		    			else if(subcuadrante==3)nuevaEsquina=33;
+		    			else nuevaEsquina=35;
+		    			break;
+		    		case 3:
+		    			if(subcuadrante==1)nuevaEsquina=38;
+		    			else if(subcuadrante==2)nuevaEsquina=40;
+		    			else if(subcuadrante==3)nuevaEsquina=61;
+		    			else nuevaEsquina=63;
+		    			break;
+		    		case 4:
+		    			if(subcuadrante==1)nuevaEsquina=47;
+		    			else if(subcuadrante==2)nuevaEsquina=49;
+		    			else if(subcuadrante==3)nuevaEsquina=66;
+		    			else nuevaEsquina=68;
+		    			break;
+		    		}
+		    		
+		    		if(agState.getlistaEsquinasVisitadas()[nuevaEsquina]<=50){
+			            agState.incrementarEnergiaUsada(CostoBajar);
+			        	agState.irNivelBajo();
+			    		return agState;
+		    		}
+		        }
+	        }
         return null;
     }
 
@@ -31,18 +67,12 @@ public class IrNivelBajo extends SearchAction {
         EstadoAmbiente environmentState = (EstadoAmbiente) est;
         EstadoDrone agState = ((EstadoDrone) ast);
 
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
-        if (true) {
-            // Update the real world
-            
-            // Update the agent state
-            
-            return environmentState;
+        //Sólo podrá ir al nivel bajo si se encuentra en el nivel medio
+        if(agState.getposicion()[0]==1){
+        	agState.irNivelBajo();
+        	environmentState.irNivelBajo();
+    		return environmentState;
         }
-
         return null;
     }
 

@@ -2,15 +2,17 @@ package frsf.cidisi.exercise.entidades;
 
 public class Esquina {
 	int idEsquina;
-	int cantidadVictimas;
+	int cantidadPersonas;
 	int[] esquinasAdyacentes;//Va a tener 8 posiciones 
 	int cuadrante;
 	int subcuadrante;
+	boolean contieneVictimario;
 	
-	public Esquina(int id){
+	public Esquina(int id,int[] esqAdy){
 		idEsquina= id;
-		cantidadVictimas=0;
-		esquinasAdyacentes= new int[8];
+		cantidadPersonas=0;
+		esquinasAdyacentes= esqAdy;
+		contieneVictimario=false;
 		
 	}
 	public int getidEsquina(){
@@ -19,11 +21,11 @@ public class Esquina {
 	 public void setidEsquina(int arg){
 	   this.idEsquina = arg;
 	 }
-	public int getcantidadVictimas(){
-	    return cantidadVictimas;
+	public int getcantidadPersonas(){
+	    return cantidadPersonas;
 	}
-	 public void setcantidadVictimas(int arg){
-	   this.cantidadVictimas = arg;
+	 public void setcantidadPersonas(int arg){
+	   this.cantidadPersonas = arg;
 	 }
 	public int[] getesquinasAdyacentes(){
 	    return esquinasAdyacentes;
@@ -42,5 +44,11 @@ public class Esquina {
 	}
 	 public void setsubcuadrante(int arg){
 	   this.subcuadrante = arg;
+	 }
+	public boolean getcontieneVictimario(){
+	    return contieneVictimario;
+	}
+	 public void setcontieneVictimario(boolean arg){
+	   this.contieneVictimario = arg;
 	 }
 }

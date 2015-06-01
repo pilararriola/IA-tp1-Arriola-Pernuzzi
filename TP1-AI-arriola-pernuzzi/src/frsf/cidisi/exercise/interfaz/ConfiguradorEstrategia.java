@@ -1,11 +1,8 @@
 package frsf.cidisi.exercise.interfaz;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
 
 import frsf.cidisi.exercise.noinformadacostouniforme.search.DroneFuncionCostoUniforme;
+import frsf.cidisi.exercise.noinformadaprofundidad.search.DroneProfundidad;
 import frsf.cidisi.exercise.principal.Simulador;
 import frsf.cidisi.faia.exceptions.PrologConnectorException;
 
@@ -16,8 +13,7 @@ public class ConfiguradorEstrategia {
 	public static final int BUSQUEDA_INFORMADA 	= 2;
 	
 	private static Simulador simulador;
-	//private static PanelSimulador window;
-	//private static Timer autoStep;
+	private static VentanaSimulacion ventanaSimulacion;
 	private static int escenario;
 	private static int busqueda;
 	
@@ -32,11 +28,11 @@ public class ConfiguradorEstrategia {
 					break;
 
 				case PROFUNDIDAD:
-					//ArqueologoSinUbeme.ejecutar(escenario);
+					DroneProfundidad.iniciar(escenario);
 					break;
 
 				case BUSQUEDA_INFORMADA:
-					//ArqueologoFuncionCosto.ejecutar(escenario);
+					//No se pudo completar esta funcionalidad
 					break;
 
 			}
@@ -46,31 +42,38 @@ public class ConfiguradorEstrategia {
 	}
 	
 	public static void setSimulador(Simulador sim) {
-		/*simulador = sim;
+		simulador = sim;
 		try {
-			String busqueda = "Búsqueda";
-			switch (busquedaAct) {
-			case (BUSQUEDA_UBEME):
-				busqueda += " A* con Ubeme.";
+			String busq = "Búsqueda";
+			switch (busqueda) {
+			case COSTO_UNIFORME:
+				busq += " no informada - costo uniforme.";
 				break;
-			case (BUSQUEDA_SINUBEME):
-				busqueda += " A* sin Ubeme.";
+			case PROFUNDIDAD:
+				busq += " no informada - profundidad.";
 				break;
-			case (BUSQUEDA_FUNCION):
-				busqueda += " con función costo.";
-				break;
-			case (BUSQUEDA_ESTRATEGIA):
-				busqueda += " en profundidad.";
+			case BUSQUEDA_INFORMADA:
+				busq += " informada.";
 				break;
 			}
-			window = new PanelSimulador(escenarioAct, busqueda);
+			ventanaSimulacion = new VentanaSimulacion(escenario, busq);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		/*autoStep = new Timer(1000, new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        autoStep();
-		    }
-		});*/
+	}
+	
+	public static void avanzar(){
+		int resultado=0;
+		while(resultado==0){	
+			resultado=simulador.avanzar();
+		}
+		if(resultado==1){
+			ventanaSimulacion.terminar();
+			simulador.terminar();
+		}
+	}
+
+	public static void registrarEvento(String string) {
+		System.out.println(string);
 	}
 }

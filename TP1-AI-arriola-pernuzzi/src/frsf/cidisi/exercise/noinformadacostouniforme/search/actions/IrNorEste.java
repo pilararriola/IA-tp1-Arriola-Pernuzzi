@@ -7,19 +7,43 @@ import frsf.cidisi.faia.state.AgentState;
 import frsf.cidisi.faia.state.EnvironmentState;
 
 public class IrNorEste extends SearchAction {
-
+	private static final int CostoDesplazamiento = 150;
     /**
      * This method updates a tree node state when the search process is running.
      * It does not updates the real world state.
      */
     @Override
     public SearchBasedAgentState execute(SearchBasedAgentState s) {
-        EstadoDrone agState = (EstadoDrone) s;
+        EstadoDrone agState = (EstadoDrone) s; 
         
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
+        if(1000-agState.getenergiaUsada()>=CostoDesplazamiento){
+	        switch(agState.getposicion()[0]){
+	        case 2: //Nivel alto
+	        	//Puede moverse al noreste únicamente si se encuentra en el cuadrante 3
+	        	if(agState.getposicion()[1]!=3){
+	        		 return null;
+	        	}
+	        	break;
+	        case 1: //Nivel medio
+	        	//Puede moverse al noreste sólo si está en el subcuadrante 3 de cada cuadrante
+	    		if(agState.getposicion()[2]!=3){
+	    			return null;
+	    		}
+	        	break;
+	        case 0: //Nivel bajo
+	        	//No puede moverse al noreste si no existen esquinas adyacentes en esa dirección
+	        	int esqAdyacenteNorEste=agState.getesquinasAdyacentes()[2];
+	        	if(esqAdyacenteNorEste==0){
+	        		return null;
+	        	}
+	        	//En el mapa no existen esquinas que tengan calles hacia el noreste, por lo tanto
+	        	//en este caso siempre va a retornar null 
+	        	break;
+	        }
+	        agState.incrementarEnergiaUsada(CostoDesplazamiento);
+			agState.irNorEste();
+			return agState;
+        }
         return null;
     }
 
@@ -31,19 +55,32 @@ public class IrNorEste extends SearchAction {
         EstadoAmbiente environmentState = (EstadoAmbiente) est;
         EstadoDrone agState = ((EstadoDrone) ast);
 
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
-        if (true) {
-            // Update the real world
-            
-            // Update the agent state
-            
-            return environmentState;
+        switch(agState.getposicion()[0]){
+        case 2: //Nivel alto
+        	//Puede moverse al noreste únicamente si se encuentra en el cuadrante 3
+        	if(agState.getposicion()[1]!=3){
+        		 return null;
+        	}
+        	break;
+        case 1: //Nivel medio
+        	//Puede moverse al noreste sólo si está en el subcuadrante 3 de cada cuadrante
+    		if(agState.getposicion()[2]!=3){
+    			return null;
+    		}
+        	break;
+        case 0: //Nivel bajo
+        	//No puede moverse al noreste si no existen esquinas adyacentes en esa dirección
+        	int esqAdyacenteNorEste=agState.getesquinasAdyacentes()[2];
+        	if(esqAdyacenteNorEste==0){
+        		return null;
+        	}
+        	//En el mapa no existen esquinas que tengan calles hacia el noreste, por lo tanto
+        	//en este caso siempre va a retornar null 
+        	break;
         }
-
-        return null;
+		agState.irNorEste();
+		environmentState.irNorEste();
+		return environmentState;
     }
 
     /**

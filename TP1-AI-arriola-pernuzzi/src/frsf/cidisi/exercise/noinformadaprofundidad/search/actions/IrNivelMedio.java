@@ -1,5 +1,8 @@
 package frsf.cidisi.exercise.noinformadaprofundidad.search.actions;
 
+import java.util.ArrayList;
+
+import frsf.cidisi.exercise.entidades.Esquina;
 import frsf.cidisi.exercise.noinformadaprofundidad.search.*;
 import frsf.cidisi.faia.agent.search.SearchAction;
 import frsf.cidisi.faia.agent.search.SearchBasedAgentState;
@@ -7,7 +10,8 @@ import frsf.cidisi.faia.state.AgentState;
 import frsf.cidisi.faia.state.EnvironmentState;
 
 public class IrNivelMedio extends SearchAction {
-
+	private static final double CostoSubir = 0;
+	private static final double CostoBajar = 0;
     /**
      * This method updates a tree node state when the search process is running.
      * It does not updates the real world state.
@@ -15,11 +19,25 @@ public class IrNivelMedio extends SearchAction {
     @Override
     public SearchBasedAgentState execute(SearchBasedAgentState s) {
         EstadoDrone agState = (EstadoDrone) s;
-        
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
+        if(agState.getposicion()[0]==2 && (1000-agState.getenergiaUsada()>=CostoBajar)){
+        	agState.incrementarEnergiaUsada(CostoBajar);
+        	agState.irNivelMedio();
+        	return agState;
+        }
+        if(agState.getposicion()[0]==0 && (1000-agState.getenergiaUsada()>=CostoSubir)){
+        	int idCuadrante=agState.getposicion()[1];
+        	int idSubcuadrante=agState.getposicion()[2];
+        	int[] esqIdentificadas = agState.getlistaEsquinasIdentificadas(); 
+        	
+    		ArrayList<Esquina> esquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(idSubcuadrante-1).getlistaEsquinas();
+    		for(Esquina esquina : esquinas){
+    			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
+    		}
+        	
+        	agState.incrementarEnergiaUsada(CostoSubir);
+        	agState.irNivelMedio();
+        	return agState;
+        }
         return null;
     }
 
@@ -31,18 +49,25 @@ public class IrNivelMedio extends SearchAction {
         EstadoAmbiente environmentState = (EstadoAmbiente) est;
         EstadoDrone agState = ((EstadoDrone) ast);
 
-        // TODO: Use this conditions
-        // PreConditions: null
-        // PostConditions: null
-        
-        if (true) {
-            // Update the real world
-            
-            // Update the agent state
-            
-            return environmentState;
+        if(agState.getposicion()[0]==2){
+        	agState.irNivelMedio();
+        	environmentState.irNivelMedio();
+        	return environmentState;
         }
-
+        if(agState.getposicion()[0]==0){
+        	int idCuadrante=agState.getposicion()[1];
+        	int idSubcuadrante=agState.getposicion()[2];
+        	int[] esqIdentificadas = agState.getlistaEsquinasIdentificadas(); 
+        	
+    		ArrayList<Esquina> esquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(idSubcuadrante-1).getlistaEsquinas();
+    		for(Esquina esquina : esquinas){
+    			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
+    		}
+        	
+        	agState.irNivelMedio();
+        	environmentState.irNivelMedio();
+        	return environmentState;
+        }
         return null;
     }
 

@@ -6,9 +6,9 @@ public class Subcuadrante {
 	int intensidad;
 	ArrayList<Esquina> listaEsquinas;
 	
-	public Subcuadrante(){
+	public Subcuadrante(ArrayList<Esquina> esquinas){
 		intensidad=0;
-		listaEsquinas= new ArrayList<Esquina> ();
+		listaEsquinas= esquinas;
 	}
 	
 	public ArrayList<Esquina> getlistaEsquinas(){

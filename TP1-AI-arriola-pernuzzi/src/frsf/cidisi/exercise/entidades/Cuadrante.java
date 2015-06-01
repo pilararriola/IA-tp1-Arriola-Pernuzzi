@@ -7,9 +7,9 @@ public class Cuadrante {
 	ArrayList<Subcuadrante> listaSubcuadrantes;
 	int intensidad; //Intensidad de señal que emite según cantidad de personas que se encuentran en él
 	
-	public Cuadrante(int id){
+	public Cuadrante(int id,ArrayList<Subcuadrante> subcuadrantes){
 		idCuadrante= id;
-		listaSubcuadrantes= new ArrayList<Subcuadrante>() ;
+		listaSubcuadrantes= subcuadrantes ;
 		intensidad=0;
 	}
 	public int getidCuadrante(){
