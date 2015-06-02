@@ -48,7 +48,18 @@ public class IrOeste extends SearchAction {
 	    		for(Esquina esquina : esquinas){
 	    			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
 	    		}
-	        	break;
+	    		//Si el próximo subcuadrante al que se puede mover en esta dirección ya tiene todas sus 
+	    		//esquinas identificadas, no se le permite ir
+	    		int proxIdSubcuadrante=idSubcuadrante-1;
+	    		ArrayList<Esquina> proxEsquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(proxIdSubcuadrante-1).getlistaEsquinas();
+	    		for(Esquina esquina : proxEsquinas){
+	    			if(esqIdentificadas[esquina.getidEsquina()]==0){
+	    		        agState.incrementarEnergiaUsada(CostoDesplazamiento);
+	    		        agState.irOeste();
+	    				return agState;
+	    			}
+	    		}
+	    		return null;
 	        case 0: //Nivel bajo
 	        	//No puede moverse al norte si no existen esquinas adyacentes en esa dirección
 	        	int esqAdyacenteOeste=agState.getesquinasAdyacentes()[7];//Depende de la orientación(array 9 pos)
@@ -120,7 +131,18 @@ public class IrOeste extends SearchAction {
     		for(Esquina esquina : esquinas){
     			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
     		}
-        	break;
+    		//Si el próximo subcuadrante al que se puede mover en esta dirección ya tiene todas sus 
+    		//esquinas identificadas, no se le permite ir
+    		int proxIdSubcuadrante=idSubcuadrante-1;
+    		ArrayList<Esquina> proxEsquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(proxIdSubcuadrante-1).getlistaEsquinas();
+    		for(Esquina esquina : proxEsquinas){
+    			if(esqIdentificadas[esquina.getidEsquina()]==0){
+    				agState.irOeste();
+    				environmentState.irOeste();
+    				return environmentState;
+    			}
+    		}
+    		return null;
         case 0: //Nivel bajo
         	//No puede moverse al norte si no existen esquinas adyacentes en esa dirección
         	int esqAdyacenteOeste=agState.getesquinasAdyacentes()[7];//Depende de la orientación(array 9 pos)

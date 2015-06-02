@@ -45,15 +45,8 @@ public class Drone extends SearchBasedAgent {
         operators.addElement(new IrEste());
         operators.addElement(new IrSur());	
         operators.addElement(new IrNorte());
-
-
-
-
-
-
         operators.addElement(new IrNorEste());
         operators.addElement(new IrSurOeste());			
-
         operators.addElement(new IrNivelMedio());	
         operators.addElement(new IrNivelAlto());	
 

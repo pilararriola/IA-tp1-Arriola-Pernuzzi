@@ -48,7 +48,18 @@ public class IrNorEste extends SearchAction {
 	    		for(Esquina esquina : esquinas){
 	    			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
 	    		}
-	        	break;
+	    		//Si el próximo subcuadrante al que se puede mover en esta dirección ya tiene todas sus 
+	    		//esquinas identificadas, no se le permite ir
+	    		int proxIdSubcuadrante=idSubcuadrante-1;
+	    		ArrayList<Esquina> proxEsquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(proxIdSubcuadrante-1).getlistaEsquinas();
+	    		for(Esquina esquina : proxEsquinas){
+	    			if(esqIdentificadas[esquina.getidEsquina()]==0){
+	    		        agState.incrementarEnergiaUsada(CostoDesplazamiento);
+	    				agState.irNorEste();
+	    				return agState;
+	    			}
+	    		}
+	    		return null;
 	        case 0: //Nivel bajo
 	        	//No puede moverse al noreste si no existen esquinas adyacentes en esa dirección
 	        	int esqAdyacenteNorEste=agState.getesquinasAdyacentes()[2];
@@ -107,7 +118,18 @@ public class IrNorEste extends SearchAction {
     		for(Esquina esquina : esquinas){
     			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
     		}
-        	break;
+    		//Si el próximo subcuadrante al que se puede mover en esta dirección ya tiene todas sus 
+    		//esquinas identificadas, no se le permite ir
+    		int proxIdSubcuadrante=idSubcuadrante-1;
+    		ArrayList<Esquina> proxEsquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(proxIdSubcuadrante-1).getlistaEsquinas();
+    		for(Esquina esquina : proxEsquinas){
+    			if(esqIdentificadas[esquina.getidEsquina()]==0){
+    				agState.irNorEste();
+    				environmentState.irNorEste();
+    				return environmentState;
+    			}
+    		}
+    		return null;
         case 0: //Nivel bajo
         	//No puede moverse al noreste si no existen esquinas adyacentes en esa dirección
         	int esqAdyacenteNorEste=agState.getesquinasAdyacentes()[2];
