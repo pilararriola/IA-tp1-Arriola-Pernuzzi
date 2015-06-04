@@ -13,7 +13,7 @@ public class CostFunction implements IStepCostFunction {
      */
     @Override
     public double calculateCost(NTree node) {
-    	return (((EstadoDrone) node.getAgentState()).getenergiaUsada() - ((EstadoDrone) node.getParent().getAgentState()).getenergiaUsada());
+    	return node.getAction().getCost();
     }
 
 }
