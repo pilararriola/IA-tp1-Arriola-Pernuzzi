@@ -1,5 +1,8 @@
 package frsf.cidisi.exercise.noinformadacostouniforme.search.actions;
 
+import java.util.ArrayList;
+
+import frsf.cidisi.exercise.entidades.Esquina;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.*;
 import frsf.cidisi.faia.agent.search.SearchAction;
 import frsf.cidisi.faia.agent.search.SearchBasedAgentState;
@@ -8,7 +11,7 @@ import frsf.cidisi.faia.state.EnvironmentState;
 
 public class IrNivelAlto extends SearchAction {
 	private static final double CostoSubir = 200;
-    /**
+	   /**
      * This method updates a tree node state when the search process is running.
      * It does not updates the real world state.
      */
@@ -19,6 +22,14 @@ public class IrNivelAlto extends SearchAction {
         //Sólo podrá ir al nivel alto si se encuentra en el nivel medio
         if(1000-agState.getenergiaUsada()>=CostoSubir ){
         	if(agState.getposicion()[0]==1){
+            	int idCuadrante=agState.getposicion()[1];
+            	int idSubcuadrante=agState.getposicion()[2];
+            	int[] esqIdentificadas = agState.getlistaEsquinasIdentificadas(); 
+            	
+	    		ArrayList<Esquina> esquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(idSubcuadrante-1).getlistaEsquinas();
+	    		for(Esquina esquina : esquinas){
+	    			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
+	    		}
 	            agState.incrementarEnergiaUsada(CostoSubir);
 	        	agState.irNivelAlto();
 	    		return agState;
@@ -35,8 +46,15 @@ public class IrNivelAlto extends SearchAction {
         EstadoAmbiente environmentState = (EstadoAmbiente) est;
         EstadoDrone agState = ((EstadoDrone) ast);
 
- 
         if(agState.getposicion()[0]==1){
+        	int idCuadrante=agState.getposicion()[1];
+        	int idSubcuadrante=agState.getposicion()[2];
+        	int[] esqIdentificadas = agState.getlistaEsquinasIdentificadas(); 
+        	
+    		ArrayList<Esquina> esquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(idSubcuadrante-1).getlistaEsquinas();
+    		for(Esquina esquina : esquinas){
+    			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
+    		}
         	agState.irNivelAlto();
         	environmentState.irNivelAlto();
     		return environmentState;
@@ -49,7 +67,7 @@ public class IrNivelAlto extends SearchAction {
      */
     @Override
     public Double getCost() {
-        return new Double(0);
+        return new Double(10);
     }
 
     /**

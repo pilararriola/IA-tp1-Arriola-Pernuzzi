@@ -1,17 +1,11 @@
 package frsf.cidisi.exercise.interfaz;
-
-
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
-
 import net.miginfocom.swing.MigLayout;
-
 public class VentanaSimulacion {
 	private JFrame frame;
 	private JButton btnIniciar;
@@ -23,7 +17,7 @@ public class VentanaSimulacion {
 	
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 586, 556); //CAMBIAR
+		frame.setBounds(100, 100, 586, 556);
 		//Imagen de fondo
 		PanelImagen p = new PanelImagen();
 		p.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -31,7 +25,7 @@ public class VentanaSimulacion {
 		frame.setContentPane(p);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new MigLayout("fillx,insets 0")); //OJO CON esto!
+		frame.getContentPane().setLayout(new MigLayout("fillx,insets 0"));
 		frame.setTitle("TP Inteligencia Artificial 2015");
 		
 		JButton btnIniciar = new JButton(">>	 BUSQUEMOS AL VICTIMARIO	<<");
@@ -50,7 +44,4 @@ public class VentanaSimulacion {
 		frame.setVisible(false);
 		frame.dispose();
 	}
-	
-
-	
 }

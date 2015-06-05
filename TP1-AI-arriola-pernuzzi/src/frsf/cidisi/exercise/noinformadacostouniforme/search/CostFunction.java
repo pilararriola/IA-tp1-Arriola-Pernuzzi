@@ -15,5 +15,4 @@ public class CostFunction implements IStepCostFunction {
     public double calculateCost(NTree node) {
     	return node.getAction().getCost();
     }
-
 }

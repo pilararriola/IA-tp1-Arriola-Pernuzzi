@@ -1,6 +1,7 @@
 package frsf.cidisi.exercise.interfaz;
 
 
+import frsf.cidisi.exercise.informada.search.DroneInformada;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.DroneFuncionCostoUniforme;
 import frsf.cidisi.exercise.noinformadaprofundidad.search.DroneProfundidad;
 import frsf.cidisi.exercise.principal.Simulador;
@@ -32,7 +33,7 @@ public class ConfiguradorEstrategia {
 					break;
 
 				case BUSQUEDA_INFORMADA:
-					//No se pudo completar esta funcionalidad
+					DroneInformada.iniciar(escenario);
 					break;
 
 			}

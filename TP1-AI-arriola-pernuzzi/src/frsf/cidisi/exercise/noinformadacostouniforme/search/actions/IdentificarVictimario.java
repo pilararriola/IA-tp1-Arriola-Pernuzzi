@@ -7,7 +7,7 @@ import frsf.cidisi.faia.state.AgentState;
 import frsf.cidisi.faia.state.EnvironmentState;
 
 public class IdentificarVictimario extends SearchAction {
-	private static final double CostoIdentificar = 0;
+	private static final double CostoIdentificar = 5;
     /**
      * This method updates a tree node state when the search process is running.
      * It does not updates the real world state.
@@ -51,7 +51,7 @@ public class IdentificarVictimario extends SearchAction {
      */
     @Override
     public Double getCost() {
-        return new Double(0);
+        return new Double(1);
     }
 
     /**

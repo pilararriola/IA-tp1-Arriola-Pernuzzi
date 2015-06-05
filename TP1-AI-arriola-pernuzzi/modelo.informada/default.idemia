@@ -9,7 +9,7 @@
     </EnvironmentState>
   </Environment>
   <Agent name="Drone">
-    <Strategy xsi:type="idemia:Search" searchStrategy="GreedySearch"/>
+    <Strategy xsi:type="idemia:Search" searchStrategy="AStarSearch"/>
     <Goal name="ObjetivoDrone" value="getVictimario()==true &amp;&amp; energia>0"/>
     <AgentState name="EstadoDrone">
       <DataStructure name="energia"/>

@@ -36,18 +36,18 @@ public class Drone extends SearchBasedAgent {
 
         // Create the operators
         Vector<SearchAction> operators = new Vector<SearchAction>();
-        operators.addElement(new IrNivelBajo());	
-        operators.addElement(new IrNivelMedio());	
-        operators.addElement(new IrNivelAlto());	
-        operators.addElement(new IrNorOeste());	
-        operators.addElement(new IrOeste());	
-        operators.addElement(new IrSurOeste());	
-        operators.addElement(new IrSur());	
-        operators.addElement(new IrSurEste());	
-        operators.addElement(new IrEste());	
-        operators.addElement(new IrNorEste());	
-        operators.addElement(new IrNorte());	
         operators.addElement(new IdentificarVictimario());	
+        operators.addElement(new IrNivelBajo());
+        operators.addElement(new IrNivelMedio());
+        operators.addElement(new IrOeste()); 
+        operators.addElement(new IrEste());
+        operators.addElement(new IrSur());	
+        operators.addElement(new IrNorte());
+        operators.addElement(new IrNorOeste());	
+        operators.addElement(new IrSurEste());
+        operators.addElement(new IrNorEste());
+        operators.addElement(new IrSurOeste());			
+        operators.addElement(new IrNivelAlto());	
 
         // Create the Problem which the agent will resolve
         Problem problem = new Problem(agGoal, agState, operators);
@@ -61,15 +61,16 @@ public class Drone extends SearchBasedAgent {
     public Action selectAction() {
 
         // Create the search strategy
+        IStepCostFunction cost = new CostFunction();
         IEstimatedCostFunction heuristic = new Heuristic(); 
-        GreedySearch strategy = new GreedySearch(heuristic);          
+        AStarSearch strategy = new AStarSearch(cost, heuristic);          
 
         // Create a Search object with the strategy
         Search searchSolver = new Search(strategy);
 
         /* Generate an XML file with the search tree. It can also be generated
          * in other formats like PDF with PDF_TREE */
-        searchSolver.setVisibleTree(Search.GRAPHVIZ_TREE);
+        searchSolver.setVisibleTree(Search.EFAIA_TREE);
 
         // Set the Search searchSolver.
         this.setSolver(searchSolver);

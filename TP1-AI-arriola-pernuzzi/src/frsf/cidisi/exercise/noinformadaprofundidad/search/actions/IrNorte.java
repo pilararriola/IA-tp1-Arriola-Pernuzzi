@@ -72,7 +72,7 @@ public class IrNorte extends SearchAction {
 	        	}
 	        	//El agente no puede moverse a otra esquina si no identificó la actual
 	        	int esquinaActual=agState.getposicion()[3];
-	        	if(esqIdentificadas[esquinaActual]==0) return null;
+	        	//if(esqIdentificadas[esquinaActual]==0) return null;
 	        	if(agState.getlistaEsquinasVisitadas()[esqAdyacenteNorte]>5){
 	        		return null;
 	        	}
@@ -155,7 +155,7 @@ public class IrNorte extends SearchAction {
         	
         	//El agente no puede moverse a otra esquina si no identificó la actual
         	int esquinaActual=agState.getposicion()[3];
-        	if(esqIdentificadas[esquinaActual]==0) return null;
+        	//if(esqIdentificadas[esquinaActual]==0) return null;
         	
         	if(agState.getlistaEsquinasVisitadas()[esqAdyacenteNorte]>5){
         		return null;

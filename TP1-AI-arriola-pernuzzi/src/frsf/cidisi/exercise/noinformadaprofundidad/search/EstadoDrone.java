@@ -260,10 +260,6 @@ public class EstadoDrone extends SearchBasedAgentState {
         	}
         }   
         
-    	//if(((EstadoDrone) obj).accionesRecorridas != this.accionesRecorridas){
-    	//	return false; 
-    	//}
-        
         //Comparar el siguiente array permite que no se eliminen los nodos de la acción 
         //Identificar victimario (que coinciden en el resto de los valores con el nodo que se  
         //haya guardado apenas se llegó a la esquina)
@@ -272,12 +268,6 @@ public class EstadoDrone extends SearchBasedAgentState {
         		return false; 
         	}
         }
-        
-        /*for(int i=0; i<79;i++){
-        	if(((EstadoDrone) obj).getlistaEsquinasVisitadas()[i] != this.getlistaEsquinasVisitadas()[i]){
-        		return false;
-        	}
-        }*/
 
         //Si no se cumplen las dos condiciones anteriores, retorna que es igual
         return true;  

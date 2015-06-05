@@ -14,8 +14,7 @@ public class CostFunction implements IStepCostFunction {
      */
     @Override
     public double calculateCost(NTree node) {
-        
-        //TODO: Complete Method
+        EstadoDrone agentState = (EstadoDrone) node.getAgentState();
         
         return 0;
     }

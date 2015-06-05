@@ -38,6 +38,8 @@ public class Drone extends SearchBasedAgent {
         Vector<SearchAction> operators = new Vector<SearchAction>();		
         
         operators.addElement(new IdentificarVictimario());	
+        operators.addElement(new IrNivelBajo());
+        operators.addElement(new IrNivelMedio());
         operators.addElement(new IrNorOeste());	
         operators.addElement(new IrOeste());	
         operators.addElement(new IrSurOeste());	
@@ -46,8 +48,6 @@ public class Drone extends SearchBasedAgent {
         operators.addElement(new IrEste());	
         operators.addElement(new IrNorEste());	
         operators.addElement(new IrNorte());
-        operators.addElement(new IrNivelBajo());
-        operators.addElement(new IrNivelMedio());
         operators.addElement(new IrNivelAlto());
 
 

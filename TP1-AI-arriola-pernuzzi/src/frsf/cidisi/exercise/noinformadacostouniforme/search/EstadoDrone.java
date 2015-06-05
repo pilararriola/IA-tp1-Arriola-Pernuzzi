@@ -1,7 +1,6 @@
 package frsf.cidisi.exercise.noinformadacostouniforme.search;
 
 import java.util.ArrayList;
-
 import frsf.cidisi.exercise.entidades.Cuadrante;
 import frsf.cidisi.exercise.entidades.Esquina;
 import frsf.cidisi.exercise.entidades.Mapa;
@@ -102,16 +101,24 @@ public class EstadoDrone extends SearchBasedAgentState {
     public void updateState(Perception p) {
     	DronePerception dronePercepcion= (DronePerception) p; //seteamos a drone perception
         //Actualiza la posicion con el gps
-    	this.posicion = dronePercepcion.getgps();
-
+    	for(int i=0;i<4;i++){
+    		this.posicion[i] = dronePercepcion.getgps()[i];
+    	}
+    	
         //Actualiza la intensidad de señales con la antena
-    	this.intensidadSenial = dronePercepcion.getantena();
-        
+    	for(int i=0;i<4;i++){
+    		this.intensidadSenial[i] = dronePercepcion.getantena()[i];
+    	}
+    	
     	//Actualiza esquinas adyacentes con la camara
-    	this.esquinasAdyacentes = obtenerEsquinasAdyacentes(dronePercepcion);
+    	for(int i=0;i<9;i++){
+    		this.esquinasAdyacentes[i] = obtenerEsquinasAdyacentes(dronePercepcion)[i];
+    	}
     	
     	//Actualiza vista en línea recta con la camara
-    	this.vistaLineaRecta = obtenerVistaLineaRecta(dronePercepcion);
+    	for(int i=0;i<9;i++){
+    		this.vistaLineaRecta[i] = obtenerVistaLineaRecta(dronePercepcion)[i];
+    	}
     	
     	//Actualiza victimario con la camara
     	if(this.vistaLineaRecta[0]==1) this.victimario = true;
@@ -261,12 +268,6 @@ public class EstadoDrone extends SearchBasedAgentState {
         		return false; 
         	}
         }
-        
-        for(int i=0; i<79;i++){
-        	if(((EstadoDrone) obj).getlistaEsquinasVisitadas()[i] != this.getlistaEsquinasVisitadas()[i]){
-        		return false;
-        	}
-        }
 
         //Si no se cumplen las dos condiciones anteriores, retorna que es igual
         return true;    
@@ -369,7 +370,7 @@ public class EstadoDrone extends SearchBasedAgentState {
         	//Saca el id de la nueva esquina a la que se debe mover 
         	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
         	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[0];//Depende de la orientación
-        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	listaEsquinasVisitadas[nuevaEsquina] +=1;
         	this.posicion[3] = nuevaEsquina;
         	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
         	//Setea el array esquinas adyacentes que está en el estado del drone
@@ -411,7 +412,7 @@ public class EstadoDrone extends SearchBasedAgentState {
         	//Saca el id de la nueva esquina a la que se debe mover 
         	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
         	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[2];//Depende de la orientación
-        	listaEsquinasVisitadas[nuevaEsquina] = 1;
+        	listaEsquinasVisitadas[nuevaEsquina] += 1;
         	this.posicion[3] = nuevaEsquina;
         	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
         	//Setea el array esquinas adyacentes que está en el estado del drone
@@ -438,7 +439,7 @@ public class EstadoDrone extends SearchBasedAgentState {
         	//Saca el id de la nueva esquina a la que se debe mover 
         	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
         	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[3];//Depende de la orientación
-        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	listaEsquinasVisitadas[nuevaEsquina] +=1;
         	this.posicion[3] = nuevaEsquina;
         	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
         	//Setea el array esquinas adyacentes que está en el estado del drone
@@ -465,7 +466,7 @@ public class EstadoDrone extends SearchBasedAgentState {
         	//Saca el id de la nueva esquina a la que se debe mover 
         	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
         	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[4];//Depende de la orientación
-        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	listaEsquinasVisitadas[nuevaEsquina] +=1;
         	this.posicion[3] = nuevaEsquina;
         	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
         	//Setea el array esquinas adyacentes que está en el estado del drone
@@ -493,7 +494,7 @@ public class EstadoDrone extends SearchBasedAgentState {
         	//Saca el id de la nueva esquina a la que se debe mover 
         	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
         	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[5];//Depende de la orientación
-        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	listaEsquinasVisitadas[nuevaEsquina] +=1;
         	this.posicion[3] = nuevaEsquina;
         	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
         	//Setea el array esquinas adyacentes que está en el estado del drone
@@ -520,7 +521,7 @@ public class EstadoDrone extends SearchBasedAgentState {
         	//Saca el id de la nueva esquina a la que se debe mover 
         	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
         	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[6];//Depende de la orientación
-        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	listaEsquinasVisitadas[nuevaEsquina] +=1;
         	this.posicion[3] = nuevaEsquina;
         	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
         	//Setea el array esquinas adyacentes que está en el estado del drone
@@ -547,7 +548,7 @@ public class EstadoDrone extends SearchBasedAgentState {
         	//Saca el id de la nueva esquina a la que se debe mover 
         	//(Lo obtiene de la lista de esquinas adyacentes en el objeto Esquina(8 posiciones))
         	int nuevaEsquina= this.listaEsquinasEnDrone.get(this.posicion[3]-1).getesquinasAdyacentes()[7];//Depende de la orientación
-        	listaEsquinasVisitadas[nuevaEsquina] =1;
+        	listaEsquinasVisitadas[nuevaEsquina] +=1;
         	this.posicion[3] = nuevaEsquina;
         	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
         	//Setea el array esquinas adyacentes que está en el estado del drone
@@ -613,7 +614,7 @@ public class EstadoDrone extends SearchBasedAgentState {
 			break;
 		}
     	int nuevaEsquina= this.posicion[3];
-    	listaEsquinasVisitadas[nuevaEsquina] =1;
+    	listaEsquinasVisitadas[nuevaEsquina] +=1;
     	int[] nuevosAdyacentes= this.listaEsquinasEnDrone.get(nuevaEsquina-1).getesquinasAdyacentes();
     	//Setea el array esquinas adyacentes que está en el estado del drone
     	//Este tiene 9 posiciones porque incluye a la propia esquina en la primera

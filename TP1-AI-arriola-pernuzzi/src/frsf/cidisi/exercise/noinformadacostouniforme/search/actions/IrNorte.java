@@ -3,6 +3,7 @@ package frsf.cidisi.exercise.noinformadacostouniforme.search.actions;
 import java.util.ArrayList;
 
 import frsf.cidisi.exercise.entidades.Esquina;
+import frsf.cidisi.exercise.entidades.Subcuadrante;
 import frsf.cidisi.exercise.noinformadacostouniforme.search.*;
 import frsf.cidisi.faia.agent.search.SearchAction;
 import frsf.cidisi.faia.agent.search.SearchBasedAgentState;
@@ -20,28 +21,61 @@ public class IrNorte extends SearchAction {
         EstadoDrone agState = (EstadoDrone) s;
         
         if(1000-agState.getenergiaUsada()>=CostoDesplazamiento){
-	        switch(agState.getposicion()[0]){
+        	int idCuadrante=agState.getposicion()[1];
+        	int idSubcuadrante=agState.getposicion()[2];
+        	int[] esqIdentificadas = agState.getlistaEsquinasIdentificadas();
+        	
+        	switch(agState.getposicion()[0]){
 	        case 2: //Nivel alto
 	        	//Puede moverse al norte si no está en los cuadrantes 1 o 2
-	        	if(agState.getposicion()[1]==1 || agState.getposicion()[1]==2){
+	        	if(idCuadrante==1 || idCuadrante==2){
 	        		 return null;
 	        	}
+	        	
+	        	/*ArrayList<Subcuadrante> subcuadrantes = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes();
+	        	for(Subcuadrante subcuadrante : subcuadrantes){
+	        		ArrayList<Esquina> esquinas = subcuadrante.getlistaEsquinas();
+	        		for(Esquina esquina : esquinas){
+	        			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
+	        		}
+	        	}*/
 	        	break;
 	        case 1: //Nivel medio
 	        	//Puede moverse al norte si no está en los subcuadrantes que limitan al norte
 	        	//dentro de cada cuadrante
-	    		if(agState.getposicion()[2]==1 || agState.getposicion()[2]==2){
+	    		if(idSubcuadrante==1 || idSubcuadrante==2){
 	    			return null;
 	    		}
-	        	
-	        	break;
-	        case 0: //Nivel bajo
+	    		
+	    		ArrayList<Esquina> esquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(idSubcuadrante-1).getlistaEsquinas();
+	    		for(Esquina esquina : esquinas){
+	    			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
+	    		}
+	    		
+	    		//Si el próximo subcuadrante al que se puede mover en esta dirección ya tiene todas sus 
+	    		//esquinas identificadas, no se le permite ir
+	    		int proxIdSubcuadrante=idSubcuadrante-2;
+	    		ArrayList<Esquina> proxEsquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(proxIdSubcuadrante-1).getlistaEsquinas();
+	    		for(Esquina esquina : proxEsquinas){
+	    			if(esqIdentificadas[esquina.getidEsquina()]==0){
+	    				agState.incrementarEnergiaUsada(CostoDesplazamiento);
+	    		        agState.irNorte();
+	    				return agState;
+	    			}
+	    		}
+	    		return null;
+			case 0: //Nivel bajo
 	        	//No puede moverse al norte si no existen esquinas adyacentes en esa dirección
 	        	int esqAdyacenteNorte=agState.getesquinasAdyacentes()[1];//Depende de la orientación(array 9 pos)
 	        	if(esqAdyacenteNorte==0){
 	        		return null;
 	        	}
-	        	
+	        	//El agente no puede moverse a otra esquina si no identificó la actual
+	        	int esquinaActual=agState.getposicion()[3];
+	        	if(esqIdentificadas[esquinaActual]==0) return null;
+	        	if(agState.getlistaEsquinasVisitadas()[esqAdyacenteNorte]>5){
+	        		return null;
+	        	}
 	        	//Tampoco podrá moverse al norte si la esquina adyacente en esa dirección 
 	        	//no pertenece al mismo subcuadrante
 	        	ArrayList<Esquina> esqSubcuadrante= agState.getlistaCuadrantesEnDrone().get(agState.getposicion()[1]-1).getlistaSubcuadrantes().get(agState.getposicion()[2]-1).getlistaEsquinas(); 
@@ -72,22 +106,46 @@ public class IrNorte extends SearchAction {
     public EnvironmentState execute(AgentState ast, EnvironmentState est) {
         EstadoAmbiente environmentState = (EstadoAmbiente) est;
         EstadoDrone agState = ((EstadoDrone) ast);
+    	int idCuadrante=agState.getposicion()[1];
+    	int idSubcuadrante=agState.getposicion()[2];
+    	int[] esqIdentificadas = agState.getlistaEsquinasIdentificadas();
         
-        switch(agState.getposicion()[0]){
+    	switch(agState.getposicion()[0]){
         case 2: //Nivel alto
         	//Puede moverse al norte si no está en los cuadrantes 1 o 2
-        	if(agState.getposicion()[1]==1 || agState.getposicion()[1]==2){
+        	if(idCuadrante==1 || idCuadrante==2){
         		 return null;
+        	}
+        	ArrayList<Subcuadrante> subcuadrantes = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes();
+        	for(Subcuadrante subcuadrante : subcuadrantes){
+        		ArrayList<Esquina> esquinas = subcuadrante.getlistaEsquinas();
+        		for(Esquina esquina : esquinas){
+        			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
+        		}
         	}
         	break;
         case 1: //Nivel medio
         	//Puede moverse al norte si no está en los subcuadrantes que limitan al norte
         	//dentro de cada cuadrante
-    		if(agState.getposicion()[2]==1 || agState.getposicion()[2]==2){
+    		if(idSubcuadrante==1 || idSubcuadrante==2){
     			return null;
     		}
-        	
-        	break;
+    		ArrayList<Esquina> esquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(idSubcuadrante-1).getlistaEsquinas();
+    		for(Esquina esquina : esquinas){
+    			if(esqIdentificadas[esquina.getidEsquina()]==0) return null;
+    		}
+    		//Si el próximo subcuadrante al que se puede mover en esta dirección ya tiene todas sus 
+    		//esquinas identificadas, no se le permite ir
+    		int proxIdSubcuadrante=idSubcuadrante-2;
+    		ArrayList<Esquina> proxEsquinas = agState.getlistaCuadrantesEnDrone().get(idCuadrante-1).getlistaSubcuadrantes().get(proxIdSubcuadrante-1).getlistaEsquinas();
+    		for(Esquina esquina : proxEsquinas){
+    			if(esqIdentificadas[esquina.getidEsquina()]==0){
+    				agState.irNorte();
+            		environmentState.irNorte();
+            		return environmentState;
+    			}
+    		}
+    		return null;
         case 0: //Nivel bajo
         	//No puede moverse al norte si no existen esquinas adyacentes en esa dirección
         	int esqAdyacenteNorte=agState.getesquinasAdyacentes()[1];
@@ -95,6 +153,13 @@ public class IrNorte extends SearchAction {
         		return null;
         	}
         	
+        	//El agente no puede moverse a otra esquina si no identificó la actual
+        	int esquinaActual=agState.getposicion()[3];
+        	if(esqIdentificadas[esquinaActual]==0) return null;
+        	
+        	if(agState.getlistaEsquinasVisitadas()[esqAdyacenteNorte]>5){
+        		return null;
+        	}
         	//Tampoco podrá moverse al norte si la esquina adyacente en esa dirección 
         	//no pertenece al mismo subcuadrante
         	ArrayList<Esquina> esqSubcuadrante= agState.getlistaCuadrantesEnDrone().get(agState.getposicion()[1]-1).getlistaSubcuadrantes().get(agState.getposicion()[2]-1).getlistaEsquinas(); 
@@ -121,7 +186,7 @@ public class IrNorte extends SearchAction {
      */
     @Override
     public Double getCost() {
-        return new Double(0);
+        return new Double(2);
     }
 
     /**
